@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Connectez-vous à Recipe Shelter pour accéder à vos recettes et favoris." />
+  <title>Connexion — Recipe Shelter</title>
+  <link rel="stylesheet" href="css/main.css" />
+</head>
+
+<body>
+
+  <!-- ══════════════ EN-TÊTE ══════════════ -->
+  <header class="rs-header" aria-label="En-tête">
+    <div class="rs-shell">
+      <div class="rs-header-inner">
+
+        <a href="index.html" class="rs-brand" aria-label="Accueil Recipe Shelter">Recipe Shelter</a>
+
+        <form id="header-search-form" class="rs-header-search" role="search">
+          <label class="visually-hidden" for="header-search-q">Rechercher une recette</label>
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+            <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398l3.85 3.85a1 1 0 0 0 1.415-1.415zm-5.242 1.15a5.5 5.5 0 1 1 0-11 5.5 5.5 0 0 1 0 11" />
+          </svg>
+          <input id="header-search-q" name="q" type="search" placeholder="Rechercher une recette…" autocomplete="off" aria-label="Rechercher une recette" />
+          <button type="submit" aria-label="Lancer la recherche">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+              <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8" />
+            </svg>
+          </button>
+        </form>
+
+        <button id="hamburger" class="rs-hamburger" type="button" aria-controls="main-nav" aria-expanded="false" aria-label="Afficher le menu principal">
+          <span></span><span></span><span></span>
+        </button>
+
+        <nav id="main-nav" class="rs-nav" aria-label="Navigation principale">
+          <a href="index.html">Accueil</a>
+          <a href="recipes.html">Recettes</a>
+          <a href="sign-in.html" aria-current="page">Connexion</a>
+          <a href="sign-up.html">Inscription</a>
+        </nav>
+
+      </div>
+    </div>
+  </header>
+
+  <!-- ══════════════ CONTENU ══════════════ -->
+  <main class="rs-main">
+    <div class="rs-shell">
+      <div class="rs-auth-wrap">
+        <div class="rs-auth-card">
+
+          <h1>Se connecter</h1>
+
+          <!-- Bandeau succès (caché par défaut) -->
+          <div id="success-banner" hidden tabindex="-1" aria-live="polite" role="status" style="padding:1.5rem;border:1px solid rgba(6,118,71,.3);border-radius:12px;background:rgba(6,118,71,.06);text-align:center;display:grid;gap:.6rem;">
+            <div style="font-size:2.5rem;" aria-hidden="true">✅</div>
+            <p style="font-weight:700;color:#067647;margin:0;">Connexion réussie !</p>
+            <p style="color:rgba(26,26,26,.65);margin:0;font-size:.9rem;">Redirection en cours…</p>
+          </div>
+
+          <!-- Alerte erreur globale -->
+          <div id="login-error-banner" hidden role="alert" style="padding:.85rem 1rem;border:1px solid rgba(180,35,24,.3);border-radius:8px;background:rgba(180,35,24,.06);font-size:.9rem;color:#b42318;margin-bottom:.5rem;">
+          </div>
+
+          <!-- Formulaire de connexion -->
+          <form id="signin-form" class="rs-form" novalidate aria-label="Formulaire de connexion">
+
+            <!-- Email -->
+            <div class="rs-field">
+              <label class="rs-label" for="email">Adresse email</label>
+              <input class="rs-input" id="email" name="email" type="email" autocomplete="email" placeholder="vous@exemple.fr" required aria-required="true" aria-describedby="email-error" />
+              <p id="email-error" class="rs-field-error" role="alert"></p>
+            </div>
+
+            <!-- Mot de passe -->
+            <div class="rs-field">
+              <div style="display:flex;justify-content:space-between;align-items:baseline;gap:.5rem;">
+                <label class="rs-label" for="password">Mot de passe</label>
+                <a href="#" id="forgot-link" style="font-size:.82rem;color:var(--rs-primary-dark);text-decoration:none;font-weight:600;" aria-label="Mot de passe oublié — récupérer l'accès">Mot de passe oublié ?</a>
+              </div>
+              <div style="position:relative;">
+                <input class="rs-input" id="password" name="password" type="password" autocomplete="current-password" placeholder="Votre mot de passe" required aria-required="true" aria-describedby="password-error" style="padding-right:3rem;" />
+                <button type="button" id="toggle-pwd" style="position:absolute;right:.6rem;top:50%;transform:translateY(-50%);background:none;border:0;cursor:pointer;color:rgba(26,26,26,.5);padding:.25rem;font-size:1.1rem;line-height:1;" aria-label="Afficher le mot de passe" aria-pressed="false">👁</button>
+              </div>
+              <p id="password-error" class="rs-field-error" role="alert"></p>
+            </div>
+
+            <!-- Se souvenir -->
+            <div style="display:flex;align-items:center;gap:.6rem;">
+              <input type="checkbox" id="remember-me" name="remember" style="width:16px;height:16px;cursor:pointer;flex-shrink:0;" />
+              <label for="remember-me" style="font-size:.88rem;color:rgba(26,26,26,.7);cursor:pointer;">Se souvenir de moi</label>
+            </div>
+
+            <button type="submit" id="submit-btn" class="rs-btn rs-btn-primary" style="margin-top:.25rem;">Se connecter</button>
+
+          </form>
+
+          <p class="rs-auth-footer-note">Pas encore de compte ? <a href="sign-up.html">Créer un compte</a></p>
+
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- ══════════════ PIED DE PAGE ══════════════ -->
+  <footer class="rs-footer">
+    <div class="rs-shell">
+      <div class="rs-footer-inner">
+        <span>© 2025 Recipe Shelter</span>
+        <nav class="rs-footer-links" aria-label="Liens du pied de page">
+          <a href="#">Mentions légales</a>
+          <a href="#">Politique de confidentialité</a>
+          <a href="#">CGU</a>
+          <a href="#">Contact</a>
+        </nav>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script src="js/signin.js"></script>
+</body>
+
+</html>

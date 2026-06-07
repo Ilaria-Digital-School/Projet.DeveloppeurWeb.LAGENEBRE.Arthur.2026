@@ -1,0 +1,38 @@
+<section class="rs-section" [formGroup]="form" aria-labelledby="recipe-general-title">
+    <div class="rs-section-heading">
+        <h2 id="recipe-general-title">Informations générales</h2>
+        <p>Titre, catégorie et courte présentation de la recette.</p>
+    </div>
+
+    <div class="rs-field">
+        <label class="rs-label" for="title">Titre <span aria-hidden="true">*</span></label>
+        <input class="rs-input" id="title" placeholder="Le titre de votre recette" formControlName="title" />
+        @if (shouldShowError('title') && form.get('title')?.hasError('required')) {
+        <p class="rs-field-error">Le titre est obligatoire.</p>
+        }
+        @if (shouldShowError('title') && form.get('title')?.hasError('minlength')) {
+        <p class="rs-field-error">Le titre doit contenir au moins 5 caractères.</p>
+        }
+    </div>
+
+    <div class="rs-field">
+        <label class="rs-label" for="categoryId">Catégorie</label>
+        <select class="rs-input" id="categoryId" formControlName="categoryId">
+            <option [ngValue]="null">Sélectionnez une catégorie</option>
+            @for (category of categories; track category.id) {
+            <option [ngValue]="category.id">{{ category.name }}</option>
+            }
+        </select>
+        @if (shouldShowError('categoryId')) {
+        <p class="rs-field-error">Renseignez une catégorie avant de soumettre la recette.</p>
+        }
+    </div>
+
+    <div class="rs-field">
+        <label class="rs-label" for="description">Description</label>
+        <textarea class="rs-textarea" id="description" rows="5" placeholder="La description de votre recette" formControlName="description"></textarea>
+        @if (shouldShowError('description') && form.get('description')?.hasError('minlength')) {
+        <p class="rs-field-error">La description doit contenir au moins 20 caractères pour la soumission.</p>
+        }
+    </div>
+</section>

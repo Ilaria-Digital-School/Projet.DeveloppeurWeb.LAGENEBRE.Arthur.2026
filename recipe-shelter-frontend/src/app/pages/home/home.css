@@ -1,0 +1,213 @@
+.hero-panel {
+    border-radius: 28px;
+    overflow: hidden;
+    position: relative;
+    min-height: 520px;
+    background: #1f1a14;
+}
+
+.hero-image {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center right;
+    filter: brightness(.75);
+}
+
+.hero-overlay {
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: 50%;
+    padding: 2.5rem;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.hero-title {
+    font-size: clamp(2rem, 3.5vw, 3rem);
+    font-weight: 700;
+    line-height: 1.2;
+}
+
+.hero-subtitle {
+    font-size: clamp(1.1rem, 1.6vw, 1.35rem);
+    line-height: 1.6;
+    max-width: 90%;
+}
+
+.hero-title,
+.hero-subtitle {
+    text-shadow: 0 4px 20px rgba(0, 0, 0, 0.45);
+}
+
+.hero-cta {
+    margin-top: auto;
+    align-self: flex-start;
+    width: auto;
+    display: inline-flex;
+    padding: 11px 26px;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+}
+
+.rs-home-categories {
+    margin-top: clamp(28px, 5vw, 56px);
+}
+
+.rs-home-recipes {
+    margin-top: clamp(24px, 3vw, 36px);
+    min-height: 300px;
+}
+
+.rs-home-section-header,
+.rs-home-categories-header {
+    display: flex;
+    gap: 18px;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 18px;
+}
+
+.rs-home-section-header h2,
+.rs-home-categories-header h2 {
+    margin: 0;
+    color: rgb(var(--rs-dark-rgb));
+    font-size: 1.5rem;
+    font-weight: 800;
+}
+
+.rs-home-recipes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px;
+    align-items: stretch;
+}
+
+.rs-home-recipes-item {
+    display: block;
+    height: 100%;
+    min-width: 0;
+}
+
+.rs-home-categories-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 14px;
+}
+
+.rs-home-category-card {
+    aspect-ratio: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 18px;
+    border: 1px solid rgb(var(--rs-primary-rgb) / 0.14);
+    border-radius: 8px;
+    background: #fff;
+    color: rgb(var(--rs-dark-rgb));
+    text-align: center;
+    text-decoration: none;
+    box-shadow: 0 10px 28px rgb(var(--rs-dark-rgb) / 0.08);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.15s ease;
+}
+
+.rs-home-category-card:hover rs-category-icon,
+.rs-home-category-card:focus-visible rs-category-icon {
+    color: rgb(var(--rs-primary-rgb));
+}
+
+.rs-home-category-name {
+    font-size: 1rem;
+    font-weight: 800;
+    overflow-wrap: anywhere;
+}
+
+.rs-home-category-card:hover,
+.rs-home-category-card:focus-visible {
+    border-color: rgb(var(--rs-accent-rgb));
+    box-shadow: 0 14px 34px rgb(var(--rs-primary-rgb) / 0.16);
+    color: rgb(var(--rs-primary-rgb));
+    transform: translateY(-2px);
+}
+
+.rs-home-category-card:focus-visible {
+    outline: 3px solid var(--rs-focus-ring);
+    outline-offset: 2px;
+}
+
+.rs-home-recipes-state,
+.rs-home-categories-state {
+    margin: 0;
+    color: rgb(var(--rs-dark-rgb) / 0.72);
+}
+
+.rs-home > .rs-home-recipes-state {
+    margin-top: 18px;
+}
+
+.rs-home-recipes-state--error,
+.rs-home-categories-state--error {
+    color: #a33a2a;
+}
+
+@media (max-width: 991.98px) {
+    .hero-panel {
+        min-height: 460px;
+    }
+
+    .hero-overlay {
+        width: 70%;
+        padding: 2rem;
+    }
+
+    .hero-subtitle {
+        max-width: 100%;
+    }
+
+    .rs-home-categories-grid {
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    }
+}
+
+@media (max-width: 575.98px) {
+    .hero-panel {
+        min-height: 420px;
+    }
+
+    .hero-overlay {
+        width: 100%;
+        padding: 1.5rem;
+        background: linear-gradient(90deg,
+                rgba(0, 0, 0, 0.55),
+                rgba(0, 0, 0, 0.15));
+    }
+
+    .rs-home-section-header,
+    .rs-home-categories-header {
+        display: grid;
+        gap: 8px;
+    }
+
+    .rs-home-recipes-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .rs-home-categories-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+    }
+
+    .rs-home-category-card {
+        padding: 14px;
+    }
+
+    .rs-home-category-name {
+        font-size: 0.95rem;
+    }
+}

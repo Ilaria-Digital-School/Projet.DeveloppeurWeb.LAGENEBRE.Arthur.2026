@@ -1,0 +1,77 @@
+
+.rs-ingredient-grid {
+  display: grid;
+  grid-template-columns: minmax(110px, 0.8fr) minmax(110px, 0.8fr) minmax(180px, 1.4fr);
+  gap: 12px;
+  align-items: start;
+}
+
+.rs-field {
+  display: grid;
+  gap: 8px;
+  grid-template-rows: auto auto minmax(2.25rem, auto);
+}
+
+.rs-field--note {
+  grid-column: 1 / -1;
+  grid-template-rows: auto auto;
+}
+
+.rs-label {
+  color: rgb(var(--rs-dark-rgb) / 0.72);
+  font-size: 0.92rem;
+  font-weight: 650;
+}
+
+.rs-input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px 14px;
+  border: 1px solid rgb(var(--rs-dark-rgb) / 0.28);
+  border-radius: 14px;
+  background: white;
+  color: rgb(var(--rs-dark-rgb) / 0.92);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.rs-input:hover {
+  border-color: rgb(var(--rs-dark-rgb) / 0.42);
+}
+
+.rs-input:focus {
+  outline: 3px solid var(--rs-focus-ring);
+  outline-offset: 2px;
+  border-color: var(--rs-accent);
+  box-shadow: 0 0 0 3px rgb(var(--rs-accent-rgb) / 0.25);
+}
+
+.rs-field-error {
+  margin: 0;
+  color: #b42318;
+  font-size: 0.82rem;
+  line-height: 1.35;
+}
+
+.rs-field-error--hidden {
+  visibility: hidden;
+}
+
+@media (max-width: 991.98px) {
+  .rs-ingredient-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .rs-field--note {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .rs-ingredient-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .rs-input {
+    border-radius: 12px;
+  }
+}

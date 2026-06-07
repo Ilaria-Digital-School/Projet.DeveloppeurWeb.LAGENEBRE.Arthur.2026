@@ -1,0 +1,54 @@
+sequenceDiagram
+  autonumber
+  actor U as Utilisateur (connecté)
+  actor A as Administrateur
+  participant F as Angular (RecipeDetailComponent)
+  participant C as CommentsController
+  participant SV as CommentsService
+  participant R as CommentsRepository
+  participant DB as MySQL
+
+  Note over U, DB: Dépôt d'un commentaire
+  U->>F: Saisit un commentaire (note facultative)
+  F->>C: POST /api/v1/recipes/:recipeId/comments
+  Note right of C: authGuard vérifie le cookie rs_session
+  C->>C: parseCreateCommentBody(req.body)
+  C->>SV: create({ recipeId, userId, comment, rating?, parentCommentId? })
+
+  alt parentCommentId fourni — c'est une réponse
+    SV->>R: findById(parentCommentId)
+    R->>DB: SELECT comment
+    DB-->>R: parent comment
+    SV->>SV: Vérifie que le parent n'est pas lui-même une réponse
+  end
+
+  SV->>R: create(input)
+  R->>DB: INSERT INTO comments
+  DB-->>R: commentId
+  R-->>SV: Comment
+  SV-->>C: Comment
+  C-->>F: 201 { comment }
+  F-->>U: Commentaire affiché
+
+  Note over A, DB: Modération par l'administrateur
+  A->>+C: GET /api/v1/admin/comments/moderated
+  C-->>-A: commentaires signalés
+  A->>+C: PATCH /api/v1/admin/comments/:id/moderate
+  C->>SV: moderate(commentId, adminUserId)
+  SV->>R: moderate(commentId, adminUserId)
+  R->>DB: UPDATE moderatedAt = NOW()
+  DB-->>R: OK
+  R-->>SV: Comment modéré
+  SV-->>C: Comment
+  C-->>-A: 200 { comment }
+
+  Note over U, DB: Suppression douce par l'auteur
+  U->>F: Clique sur "Supprimer mon commentaire"
+  F->>C: DELETE /api/v1/recipes/:recipeId/comments/:id
+  C->>SV: softDelete(commentId, userId)
+  SV->>R: softDelete(commentId, userId)
+  R->>DB: UPDATE deletedAt = NOW()
+  DB-->>R: OK
+  SV-->>C: OK
+  C-->>F: 200 { ok true }
+  F-->>U: Commentaire retiré

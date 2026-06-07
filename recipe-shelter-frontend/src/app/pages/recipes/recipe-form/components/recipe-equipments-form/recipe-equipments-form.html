@@ -1,0 +1,9 @@
+<div class="rs-field" [formGroup]="form">
+  <label class="rs-label" [attr.for]="equipmentInputId">Ustensile {{ equipmentNumber }}</label>
+  <select class="rs-input" [id]="equipmentInputId" formControlName="equipmentId">
+    <option [ngValue]="null">Sélectionnez un ustensile</option>
+    @for (equipment of equipments; track equipment.id) {
+    <option [ngValue]="equipment.id">{{ equipment.name }}</option>
+    }
+  </select>
+</div>

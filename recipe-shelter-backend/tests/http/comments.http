@@ -1,0 +1,265 @@
+# ============================================
+# Comments
+# ============================================
+
+@baseUrl = http://localhost:3000/api/v1
+@sessionCookie = PASTE_RS_SESSION_COOKIE_HERE
+@recipeId = 1
+@commentId = 1
+@parentCommentId = 1
+@recipeSlug = cake-marbre-maison
+
+### Recipe comments - public
+GET {{baseUrl}}/recipes/{{recipeId}}/comments
+
+# Expected response shape:
+# [
+#   {
+#     "id": 1,
+#     "recipeId": 1,
+#     "author": {
+#       "id": 10,
+#       "username": "alice"
+#     },
+#     "parentCommentId": null,
+#     "moderatedAt": null,
+#     "deletedAt": null,
+#     "rating": 5,
+#     "comment": "Super recette, facile à suivre.",
+#     "createdAt": "2026-05-10T10:00:00.000Z",
+#     "updatedAt": "2026-05-10T10:00:00.000Z",
+#     "children": [
+#       {
+#         "id": 2,
+#         "recipeId": 1,
+#         "author": {
+#           "id": 11,
+#           "username": "bob"
+#         },
+#         "parentCommentId": 1,
+#         "moderatedAt": null,
+#         "deletedAt": "2026-05-10T10:12:00.000Z",
+#         "rating": null,
+#         "comment": "Commentaire supprimé par son auteur.",
+#         "createdAt": "2026-05-10T10:05:00.000Z",
+#         "updatedAt": "2026-05-10T10:12:00.000Z",
+#         "children": []
+#       },
+#       {
+#         "id": 3,
+#         "recipeId": 1,
+#         "author": {
+#           "id": 12,
+#           "username": "charlie"
+#         },
+#         "parentCommentId": 1,
+#         "moderatedAt": "2026-05-10T10:20:00.000Z",
+#         "deletedAt": null,
+#         "rating": null,
+#         "comment": "Ce commentaire a été masqué par la modération.",
+#         "createdAt": "2026-05-10T10:15:00.000Z",
+#         "updatedAt": "2026-05-10T10:20:00.000Z",
+#         "children": []
+#       }
+#     ]
+#   }
+# ]
+
+### Published recipe detail with comment tree - public
+GET {{baseUrl}}/recipes/{{recipeSlug}}
+
+# Expected comments shape in recipe detail:
+# {
+#   "author": {
+#     "id": 12,
+#     "username": "arthur"
+#   },
+#   "commentsCount": 4,
+#   "averageRating": 4.5,
+#   "ratingsCount": 2,
+#   "comments": [
+#     {
+#       "id": 1,
+#       "isModerated": false,
+#       "isDeleted": false,
+#       "author": {
+#         "id": 10,
+#         "username": "alice"
+#       },
+#       "parentCommentId": null,
+#       "moderatedAt": null,
+#       "rating": 5,
+#       "comment": "Super recette, facile à suivre.",
+#       "createdAt": "2026-05-10T10:00:00.000Z",
+#       "updatedAt": "2026-05-10T10:00:00.000Z",
+#       "children": [
+#         {
+#           "id": 2,
+#           "isModerated": false,
+#           "isDeleted": false,
+#           "author": {
+#             "id": 11,
+#             "username": "bob"
+#           },
+#           "parentCommentId": 1,
+#           "moderatedAt": null,
+#           "rating": null,
+#           "comment": "Merci pour l'astuce.",
+#           "createdAt": "2026-05-10T10:05:00.000Z",
+#           "updatedAt": "2026-05-10T10:05:00.000Z",
+#           "children": []
+#         },
+#         {
+#           "id": 3,
+#           "isModerated": false,
+#           "isDeleted": true,
+#           "author": {
+#             "id": 12,
+#             "username": "charlie"
+#           },
+#           "parentCommentId": 1,
+#           "moderatedAt": null,
+#           "rating": null,
+#           "comment": "Commentaire supprimé par son auteur.",
+#           "createdAt": "2026-05-10T10:10:00.000Z",
+#           "updatedAt": "2026-05-10T10:12:00.000Z",
+#           "children": []
+#         },
+#         {
+#           "id": 4,
+#           "isModerated": true,
+#           "isDeleted": false,
+#           "author": {
+#             "id": 13,
+#             "username": "diane"
+#           },
+#           "parentCommentId": 1,
+#           "moderatedAt": "2026-05-10T10:20:00.000Z",
+#           "rating": null,
+#           "comment": "Ce commentaire a été masqué par la modération.",
+#           "createdAt": "2026-05-10T10:15:00.000Z",
+#           "updatedAt": "2026-05-10T10:20:00.000Z",
+#           "children": []
+#         }
+#       ]
+#     }
+#   ]
+# }
+
+### Recipe comments - bad recipe id
+GET {{baseUrl}}/recipes/abc/comments
+
+### Create root comment with rating
+POST {{baseUrl}}/recipes/{{recipeId}}/comments
+Content-Type: application/json
+Cookie: rs_session={{sessionCookie}}
+
+{
+  "rating": 5,
+  "comment": "Super recette, facile a suivre."
+}
+
+### Create reply without rating
+POST {{baseUrl}}/recipes/{{recipeId}}/comments
+Content-Type: application/json
+Cookie: rs_session={{sessionCookie}}
+
+{
+  "parentCommentId": {{parentCommentId}},
+  "comment": "Merci pour l'astuce."
+}
+
+### Create comment - missing auth
+POST {{baseUrl}}/recipes/{{recipeId}}/comments
+Content-Type: application/json
+
+{
+  "rating": 4,
+  "comment": "Je teste sans token."
+}
+
+### Create comment - missing comment
+POST {{baseUrl}}/recipes/{{recipeId}}/comments
+Content-Type: application/json
+Cookie: rs_session={{sessionCookie}}
+
+{
+  "rating": 5
+}
+
+### Create comment - invalid rating
+POST {{baseUrl}}/recipes/{{recipeId}}/comments
+Content-Type: application/json
+Cookie: rs_session={{sessionCookie}}
+
+{
+  "rating": 6,
+  "comment": "Note invalide."
+}
+
+### Create reply - rating not allowed
+POST {{baseUrl}}/recipes/{{recipeId}}/comments
+Content-Type: application/json
+Cookie: rs_session={{sessionCookie}}
+
+{
+  "parentCommentId": {{parentCommentId}},
+  "rating": 4,
+  "comment": "Une reponse ne peut pas noter la recette."
+}
+
+### Create nested reply - not allowed
+POST {{baseUrl}}/recipes/{{recipeId}}/comments
+Content-Type: application/json
+Cookie: rs_session={{sessionCookie}}
+
+{
+  "parentCommentId": {{parentCommentId}},
+  "comment": "Une reponse a une reponse doit etre refusee."
+}
+
+### Update my comment
+PATCH {{baseUrl}}/comments/{{commentId}}
+Content-Type: application/json
+Cookie: rs_session={{sessionCookie}}
+
+{
+  "rating": 4,
+  "comment": "Commentaire mis a jour."
+}
+
+### Update my comment - remove rating
+PATCH {{baseUrl}}/comments/{{commentId}}
+Content-Type: application/json
+Cookie: rs_session={{sessionCookie}}
+
+{
+  "rating": null,
+  "comment": "Commentaire mis a jour sans note."
+}
+
+### Update comment - bad comment id
+PATCH {{baseUrl}}/comments/abc
+Content-Type: application/json
+Cookie: rs_session={{sessionCookie}}
+
+{
+  "rating": 4,
+  "comment": "Identifiant invalide."
+}
+
+### Update comment - missing auth
+PATCH {{baseUrl}}/comments/{{commentId}}
+Content-Type: application/json
+
+{
+  "rating": 4,
+  "comment": "Je teste sans token."
+}
+
+### Delete my comment - soft delete
+DELETE {{baseUrl}}/comments/{{commentId}}
+Cookie: rs_session={{sessionCookie}}
+
+### Delete comment - missing auth
+DELETE {{baseUrl}}/comments/{{commentId}}

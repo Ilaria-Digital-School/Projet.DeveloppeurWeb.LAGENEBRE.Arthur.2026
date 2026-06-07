@@ -1,0 +1,42 @@
+<section class="rs-public-recipes">
+    @if (title) {
+    <header class="rs-page-header">
+        <div>
+            <h1>{{ title }}</h1>
+            @if (subtitle) {
+            <p>{{ subtitle }}</p>
+            }
+        </div>
+
+        @if (actionLabel && actionRoute) {
+        <a class="rs-btn rs-btn-primary" [routerLink]="actionRoute">{{ actionLabel }}</a>
+        }
+    </header>
+    }
+
+    @if (loading) {
+    <div class="rs-recipes-grid" aria-busy="true" aria-label="Chargement des recettes">
+        @for (i of skeletons; track i) {
+        <div class="rs-recipe-card-skeleton"></div>
+        }
+    </div>
+    } @else if (error) {
+    <section class="rs-state-card rs-state-card--error" aria-live="polite">
+        <p>{{ error }}</p>
+    </section>
+    } @else if (isEmpty) {
+    <section class="rs-state-card rs-state-card--empty">
+        <h2>{{ emptyTitle }}</h2>
+        @if (emptyDescription) {
+        <p>{{ emptyDescription }}</p>
+        }
+    </section>
+    } @else {
+    <div class="rs-recipes-grid" aria-label="Liste des recettes">
+        <ng-content></ng-content>
+    </div>
+    @if (pagination; as paginationMeta) {
+    <rs-pagination-controls [pagination]="paginationMeta" (pageChange)="pageChange.emit($event)" />
+    }
+    }
+</section>

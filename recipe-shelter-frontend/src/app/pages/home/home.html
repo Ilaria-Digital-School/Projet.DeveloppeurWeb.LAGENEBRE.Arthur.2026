@@ -1,0 +1,66 @@
+<section class="rs-home">
+  <div class="hero-panel">
+    <img class="hero-image" src="/assets/images/home/home-hero.webp" alt="" width="1920" height="1280" loading="eager" fetchpriority="high" decoding="async">
+    <div class="hero-overlay">
+      <h1 class="hero-title mb-2">Des milliers de recettes à portée de main</h1>
+      <p class="hero-subtitle mb-4">Du plat rapide du quotidien aux recettes du monde entier, trouvez l'inspiration et transformez chaque repas en moment de plaisir.</p>
+      @if (!sessionService.isAuthenticated()) {
+      <a routerLink="/sign-up" class="rs-btn rs-btn-primary hero-cta">Inscription</a>
+      } @else {
+        <a routerLink="/me/recipes/submit" class="rs-btn rs-btn-primary hero-cta">Créer une recette</a>
+      }
+    </div>
+  </div>
+
+  <section class="rs-home-categories" aria-labelledby="home-categories-title">
+    <div class="rs-home-categories-header">
+      <h2 id="home-categories-title">Explorer par catégorie</h2>
+    </div>
+
+    @if (categoriesLoading()) {
+    <p class="rs-home-categories-state" aria-live="polite">Chargement des catégories...</p>
+    } @else if (categoriesError()) {
+    <p class="rs-home-categories-state rs-home-categories-state--error" aria-live="polite">{{ categoriesError() }}</p>
+    } @else if (categories().length === 0) {
+    <p class="rs-home-categories-state" aria-live="polite">Aucune catégorie disponible pour le moment.</p>
+    } @else {
+    <div class="rs-home-categories-grid">
+      @for (category of categories(); track category.id) {
+      <a class="rs-home-category-card" routerLink="/recipes/search" [queryParams]="{ categoryId: category.id }">
+        <rs-category-icon [iconName]="category.iconName" />
+        <span class="rs-home-category-name">{{ category.name }}</span>
+      </a>
+      }
+    </div>
+    }
+  </section>
+
+  @if (favoriteError()) {
+  <p class="rs-home-recipes-state rs-home-recipes-state--error" aria-live="polite">{{ favoriteError() }}</p>
+  }
+
+  <section class="rs-home-recipes" aria-labelledby="home-recent-recipes-title">
+    <div class="rs-home-section-header">
+      <div>
+        <h2 id="home-recent-recipes-title">Dernières recettes publiées</h2>
+      </div>
+    </div>
+
+    @if (recentRecipesLoading()) {
+    <p class="rs-home-recipes-state" aria-live="polite">Chargement des dernières recettes...</p>
+    } @else if (recentRecipesError()) {
+    <p class="rs-home-recipes-state rs-home-recipes-state--error" aria-live="polite">{{ recentRecipesError() }}</p>
+    } @else if (recentRecipes().length === 0) {
+    <p class="rs-home-recipes-state" aria-live="polite">Aucune recette publiée pour le moment.</p>
+    } @else {
+    <div class="rs-home-recipes-grid">
+      @for (recipe of recentRecipes(); track recipe.id) {
+      <div class="rs-home-recipes-item">
+        <rs-recipe-card [recipe]="recipe" [favoriteUpdating]="isFavoriteUpdating(recipe.id)" (favoriteToggled)="onFavoriteToggle($event)" />
+      </div>
+      }
+    </div>
+    }
+  </section>
+
+</section>

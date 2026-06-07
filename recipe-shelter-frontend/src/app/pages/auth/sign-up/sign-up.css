@@ -1,0 +1,46 @@
+@import "../../../shared/styles/components/auth-form.css";
+
+.rs-consent-field {
+    gap: 8px;
+}
+
+.rs-checkbox-row {
+    display: grid;
+    grid-template-columns: 18px 1fr;
+    gap: 10px;
+    align-items: start;
+}
+
+.rs-checkbox-input {
+    width: 18px;
+    height: 18px;
+    margin: 2px 0 0;
+    accent-color: var(--rs-accent);
+    cursor: pointer;
+}
+
+.rs-checkbox-input:focus-visible {
+    outline: 3px solid var(--rs-focus-ring);
+    outline-offset: 2px;
+}
+
+.rs-checkbox-input.ng-touched.ng-invalid {
+    box-shadow: 0 0 0 3px rgb(217 45 32 / 0.12);
+}
+
+.rs-checkbox-copy {
+    font-size: 0.84rem;
+    line-height: 1.45;
+    color: rgb(var(--rs-dark-rgb) / 0.76);
+}
+
+.rs-auth-inline-link {
+    color: var(--rs-primary-dark);
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+
+.rs-auth-inline-link:hover {
+    color: var(--rs-accent);
+}

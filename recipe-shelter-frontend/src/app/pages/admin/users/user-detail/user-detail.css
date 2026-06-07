@@ -1,0 +1,235 @@
+.rs-admin-user,
+.rs-user-content,
+.rs-moderation-form,
+.rs-form-actions {
+    display: grid;
+    gap: 16px;
+}
+
+.rs-admin-user {
+    gap: 22px;
+}
+
+.rs-back-link {
+    width: fit-content;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--rs-primary-dark);
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.rs-user-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 14px;
+}
+
+.rs-user-header h1,
+.rs-state-card h1,
+.rs-state-card p,
+.rs-card h2,
+.rs-muted,
+.rs-error-message,
+.rs-info-message,
+.rs-field-error,
+.rs-hint,
+.rs-log-list p {
+    margin: 0;
+}
+
+.rs-user-header h1 {
+    color: rgb(var(--rs-dark-rgb) / 0.92);
+    font-size: clamp(1.8rem, 3.2vw, 2.4rem);
+    line-height: 1.15;
+}
+
+.rs-user-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(280px, 340px);
+    gap: clamp(16px, 3vw, 28px);
+    align-items: start;
+}
+
+.rs-card,
+.rs-state-card {
+    border: 1px solid rgb(var(--rs-dark-rgb) / 0.10);
+    border-radius: 8px;
+    background: white;
+}
+
+.rs-card,
+.rs-state-card {
+    padding: clamp(18px, 3vw, 24px);
+}
+
+.rs-card h2 {
+    margin-bottom: 14px;
+    color: rgb(var(--rs-dark-rgb) / 0.88);
+    font-size: 1.18rem;
+}
+
+.rs-info-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    margin: 0;
+}
+
+.rs-info-grid div,
+.rs-status-row {
+    min-width: 0;
+    padding: 12px 14px;
+    border: 1px solid rgb(var(--rs-dark-rgb) / 0.09);
+    border-radius: 8px;
+}
+
+.rs-info-grid__wide {
+    grid-column: 1 / -1;
+}
+
+.rs-info-grid dt {
+    margin-bottom: 4px;
+    color: rgb(var(--rs-dark-rgb) / 0.66);
+    font-weight: 700;
+}
+
+.rs-info-grid dd {
+    margin: 0;
+    color: rgb(var(--rs-dark-rgb) / 0.86);
+    font-weight: 700;
+    line-height: 1.45;
+    overflow-wrap: anywhere;
+}
+
+.rs-card--sticky {
+    position: sticky;
+    top: 18px;
+    display: grid;
+    gap: 16px;
+}
+
+.rs-status-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    background: rgb(var(--rs-primary-rgb) / 0.06);
+}
+
+.rs-label {
+    color: rgb(var(--rs-dark-rgb) / 0.72);
+    font-weight: 650;
+}
+
+.rs-textarea {
+    width: 100%;
+    min-height: 136px;
+    resize: vertical;
+    border: 1px solid rgb(var(--rs-dark-rgb) / 0.28);
+    border-radius: 8px;
+    padding: 12px 14px;
+    box-sizing: border-box;
+}
+
+.rs-form-actions {
+    grid-template-columns: 1fr 1fr;
+}
+
+.rs-btn-danger {
+    border-color: #b42318;
+    background: #b42318;
+    color: white;
+}
+
+.rs-btn-outline {
+    border-color: rgb(var(--rs-primary-rgb) / 0.34);
+    background: white;
+    color: var(--rs-primary-dark);
+}
+
+.rs-state-card h1 {
+    margin-bottom: 6px;
+    color: rgb(var(--rs-dark-rgb) / 0.88);
+    font-size: 1.18rem;
+}
+
+.rs-state-card p,
+.rs-muted,
+.rs-log-list p {
+    color: rgb(var(--rs-dark-rgb) / 0.66);
+    line-height: 1.55;
+}
+
+.rs-state-card--error,
+.rs-error-message,
+.rs-field-error {
+    border-color: rgb(180 35 24 / 0.24);
+    background: rgb(180 35 24 / 0.06);
+    color: #b42318;
+}
+
+.rs-state-card--success {
+    border-color: rgb(22 101 52 / 0.24);
+    background: rgb(22 101 52 / 0.08);
+}
+
+.rs-state-card--success p {
+    color: #166534;
+}
+
+.rs-error-message,
+.rs-field-error,
+.rs-info-message {
+    padding: 12px 14px;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+.rs-error-message,
+.rs-field-error {
+    border: 1px solid rgb(180 35 24 / 0.24);
+}
+
+.rs-info-message {
+    border: 1px solid rgb(var(--rs-primary-rgb) / 0.18);
+    background: rgb(var(--rs-primary-rgb) / 0.05);
+    color: rgb(var(--rs-dark-rgb) / 0.72);
+}
+
+.rs-hint {
+    color: rgb(var(--rs-dark-rgb) / 0.66);
+    font-size: 0.86rem;
+}
+
+.rs-log-list {
+    display: grid;
+    gap: 12px;
+    margin: 0;
+    padding-left: 22px;
+}
+
+@media (max-width: 991.98px) {
+    .rs-user-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .rs-card--sticky {
+        position: static;
+    }
+}
+
+@media (max-width: 620px) {
+    .rs-info-grid,
+    .rs-form-actions {
+        grid-template-columns: 1fr;
+    }
+
+    .rs-card,
+    .rs-state-card {
+        padding: 16px;
+    }
+}

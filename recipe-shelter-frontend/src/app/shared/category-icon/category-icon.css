@@ -1,0 +1,30 @@
+:host {
+    display: inline-flex;
+}
+
+.rs-category-icon {
+    width: 56px;
+    height: 56px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: rgb(var(--rs-accent-rgb) / 0.16);
+    color: rgb(var(--rs-primary-rgb));
+    transition: background 0.2s ease, color 0.2s ease, transform 0.15s ease;
+}
+
+.rs-category-icon svg {
+    width: 34px;
+    height: 34px;
+    fill: none;
+    stroke: currentcolor;
+    stroke-width: 2.4;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.rs-category-icon circle {
+    fill: currentcolor;
+    stroke: none;
+}

@@ -1,0 +1,204 @@
+.rs-admin-pending {
+    display: grid;
+    gap: 24px;
+}
+
+.rs-back-link {
+    width: fit-content;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--rs-primary-dark);
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.rs-page-header {
+    display: grid;
+    gap: 8px;
+}
+
+.rs-page-header h1,
+.rs-page-header p {
+    margin: 0;
+}
+
+.rs-page-header p {
+    max-width: 560px;
+    color: rgb(var(--rs-dark-rgb) / 0.66);
+    font-size: 1.05rem;
+    line-height: 1.6;
+}
+
+.rs-admin-pending-title {
+    font-size: clamp(1.8rem, 3.2vw, 2.4rem);
+    line-height: 1.15;
+    letter-spacing: 0;
+    color: rgb(var(--rs-dark-rgb) / 0.92);
+}
+
+.rs-pending-grid {
+    display: grid;
+    gap: 14px;
+}
+
+.rs-pending-card,
+.rs-state-card {
+    border: 1px solid rgb(var(--rs-dark-rgb) / 0.10);
+    border-radius: 8px;
+    background: white;
+    box-shadow: 0 10px 24px rgb(0 0 0 / 0.04);
+}
+
+.rs-pending-card {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 18px;
+    align-items: center;
+    padding: 18px;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.rs-pending-card:hover {
+    border-color: rgb(var(--rs-dark-rgb) / 0.16);
+    box-shadow:
+        0 12px 28px rgb(0 0 0 / 0.07),
+        0 28px 48px rgb(0 0 0 / 0.05);
+    transform: translateY(-1px);
+}
+
+.rs-pending-card-main {
+    min-width: 0;
+    display: grid;
+    gap: 12px;
+}
+
+.rs-pending-card-heading {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.rs-pending-card h2 {
+    margin: 0;
+    min-width: 0;
+    overflow-wrap: anywhere;
+    color: rgb(var(--rs-dark-rgb) / 0.9);
+    font-size: 1.2rem;
+    font-weight: 600;
+    line-height: 1.35;
+}
+
+.rs-pending-description {
+    display: -webkit-box;
+    margin: 0;
+    overflow: hidden;
+    color: rgb(var(--rs-dark-rgb) / 0.66);
+    font-size: 0.95rem;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+}
+
+.rs-pending-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 0;
+    margin: 0;
+    color: rgb(var(--rs-dark-rgb) / 0.66);
+    font-size: 0.88rem;
+    line-height: 1.45;
+}
+
+.rs-pending-meta-item {
+    display: inline-flex;
+    align-items: center;
+}
+
+.rs-pending-meta-item + .rs-pending-meta-item::before {
+    content: "•";
+    padding-inline: 8px;
+    color: rgb(var(--rs-dark-rgb) / 0.66);
+}
+
+.rs-pending-actions {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.rs-btn-outline {
+    border-color: rgb(var(--rs-primary-rgb) / 0.34);
+    background: white;
+    color: var(--rs-primary-dark);
+}
+
+.rs-btn-outline:hover {
+    border-color: rgb(var(--rs-primary-rgb) / 0.58);
+    background: rgb(var(--rs-primary-rgb) / 0.06);
+    color: var(--rs-primary-dark);
+    transform: translateY(-1px);
+}
+
+.rs-btn-outline:focus-visible {
+    outline: 3px solid var(--rs-focus-ring);
+    outline-offset: 2px;
+    box-shadow: 0 0 0 3px rgb(var(--rs-primary-rgb) / 0.22);
+}
+
+.rs-state-card {
+    padding: 24px;
+}
+
+.rs-state-card h2,
+.rs-state-card p {
+    margin: 0;
+}
+
+.rs-state-card h2 {
+    margin-bottom: 6px;
+    color: rgb(var(--rs-dark-rgb) / 0.88);
+    font-size: 1.12rem;
+}
+
+.rs-state-card p {
+    color: rgb(var(--rs-dark-rgb) / 0.66);
+    line-height: 1.55;
+}
+
+.rs-state-card--error {
+    border-color: rgb(180 35 24 / 0.24);
+    background: rgb(180 35 24 / 0.06);
+}
+
+.rs-state-card--error p {
+    color: #b42318;
+}
+
+.rs-state-card--success {
+    border-color: rgb(22 101 52 / 0.24);
+    background: rgb(22 101 52 / 0.08);
+}
+
+.rs-state-card--success p {
+    color: #166534;
+}
+
+@media (max-width: 640px) {
+    .rs-admin-pending {
+        gap: 18px;
+    }
+
+    .rs-pending-card {
+        grid-template-columns: 1fr;
+        padding: 16px;
+    }
+
+    .rs-pending-actions,
+    .rs-pending-actions .rs-btn {
+        width: 100%;
+    }
+}

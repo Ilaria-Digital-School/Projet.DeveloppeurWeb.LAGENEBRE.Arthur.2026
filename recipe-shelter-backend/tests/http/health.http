@@ -1,0 +1,18 @@
+# ============================================
+# Health
+# ============================================
+
+@baseUrl = http://localhost:3000/api/v1
+@adminSessionCookie = PASTE_ADMIN_RS_SESSION_COOKIE_HERE
+
+### Health live
+GET {{baseUrl}}/health/live
+Cookie: rs_session={{adminSessionCookie}}
+
+### Health ready
+GET {{baseUrl}}/health/ready
+Cookie: rs_session={{adminSessionCookie}}
+
+### Health
+GET {{baseUrl}}/health
+Cookie: rs_session={{adminSessionCookie}}

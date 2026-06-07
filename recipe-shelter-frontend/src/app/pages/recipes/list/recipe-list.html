@@ -1,0 +1,5 @@
+<rs-recipe-list-shell title="Recettes" subtitle="Découvrez les recettes publiées par la communauté." emptyTitle="Aucune recette publiée." emptyDescription="Revenez bientôt pour découvrir les premières recettes." actionLabel="Créer une recette" [actionRoute]="['/me/recipes/submit']" [loading]="isLoading()" [error]="errorMessage()" [isEmpty]="recipes().length === 0" [pagination]="pagination()" (pageChange)="onPageChange($event)">
+    @for (recipe of recipes(); track recipe.id; let first = $first) {
+    <rs-recipe-card [recipe]="recipe" [eager]="first" [favoriteUpdating]="isFavoriteUpdating(recipe.id)" (favoriteToggled)="onFavoriteToggle($event)" />
+    }
+</rs-recipe-list-shell>

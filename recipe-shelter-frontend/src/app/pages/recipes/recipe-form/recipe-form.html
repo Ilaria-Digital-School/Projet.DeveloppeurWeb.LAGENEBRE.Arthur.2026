@@ -1,0 +1,195 @@
+<section class="rs-recipe-form-page">
+    <header class="rs-page-header">
+        <div>
+            <h1>{{ recipeId ? 'Modifier la recette' : 'Créer une recette' }}</h1>
+            <p>Préparez les informations principales, enregistrez un brouillon puis soumettez la recette quand elle est prête.</p>
+        </div>
+    </header>
+
+    @if (isInitialLoading()) {
+    <section class="rs-state-card" aria-live="polite">
+        <h2>Chargement de la recette</h2>
+        <p>Nous récupérons les informations de votre brouillon.</p>
+    </section>
+    } @else if (hasInitialLoadError()) {
+    <section class="rs-state-card rs-state-card--error" role="alert">
+        <h2>Impossible de charger la recette</h2>
+        <p>{{ errorMessage() }}</p>
+    </section>
+    } @else {
+    @if (recipe()?.status === 'rejected' && recipe()?.rejectionReason) {
+    <section class="rs-state-card rs-state-card--error">
+        <h2>Recette refusée</h2>
+        <p>Motif du refus : {{ recipe()?.rejectionReason }}</p>
+    </section>
+    }
+
+    @if (isReadonly()) {
+    <section class="rs-state-card" role="status" aria-live="polite">
+        <h2>Recette non modifiable</h2>
+        <p>{{ readOnlyMessage }}</p>
+    </section>
+    }
+
+    <form class="rs-recipe-form" [formGroup]="form" (ngSubmit)="onSaveDraft()" novalidate>
+        <div class="rs-form-layout">
+            <div class="rs-form-main">
+                <rs-recipe-general-info-form [form]="form" [categories]="categories()"></rs-recipe-general-info-form>
+
+                <rs-recipe-cover-image-form [form]="form" [readonly]="isReadonly()"></rs-recipe-cover-image-form>
+
+                <section class="rs-section" aria-labelledby="recipe-time-title">
+                    <div class="rs-section-heading">
+                        <h2 id="recipe-time-title">Temps & portions</h2>
+                        <p>Renseignez les durées en minutes et le nombre de portions.</p>
+                    </div>
+
+                    <div class="rs-grid rs-grid--four rs-grid--time">
+                        <div class="rs-field">
+                            <label class="rs-label" for="prepTimeMinutes">Préparation <span aria-hidden="true">*</span></label>
+                            <input class="rs-input" [class.rs-input--invalid]="shouldShowControlError('prepTimeMinutes')" id="prepTimeMinutes" type="number" min="0" inputmode="numeric" placeholder="Minute(s)" formControlName="prepTimeMinutes" />
+                            @if (shouldShowControlError('prepTimeMinutes')) {
+                            <p class="rs-field-error">Renseignez le temps de préparation avant de soumettre.</p>
+                            }
+                        </div>
+
+                        <div class="rs-field">
+                            <label class="rs-label" for="cookTimeMinutes">Cuisson</label>
+                            <input class="rs-input" id="cookTimeMinutes" type="number" min="0" inputmode="numeric" placeholder="Minute(s)" formControlName="cookTimeMinutes" />
+                        </div>
+
+                        <div class="rs-field">
+                            <label class="rs-label" for="restTimeMinutes">Repos</label>
+                            <input class="rs-input" id="restTimeMinutes" type="number" min="0" inputmode="numeric" placeholder="Minute(s)" formControlName="restTimeMinutes" />
+                        </div>
+
+                        <div class="rs-field">
+                            <label class="rs-label" for="servings">Portions <span aria-hidden="true">*</span></label>
+                            <input class="rs-input" [class.rs-input--invalid]="shouldShowControlError('servings')" id="servings" type="number" min="1" inputmode="numeric" placeholder="Personne(s)" formControlName="servings" />
+                            @if (shouldShowControlError('servings')) {
+                            <p class="rs-field-error">Renseignez un nombre de portions supérieur à 0.</p>
+                            }
+                        </div>
+                    </div>
+                </section>
+
+                <section class="rs-section" aria-labelledby="recipe-ingredients-title">
+                    <div class="rs-section-heading">
+                        <h2 id="recipe-ingredients-title">Ingrédients</h2>
+                        <p>Ajoutez les ingrédients dans l'ordre de la recette. Les lignes vides seront ignorées à l'enregistrement.</p>
+                    </div>
+
+                    <div class="rs-placeholder-list" formArrayName="ingredients">
+                        @for (ingredient of ingredients.controls; track $index) {
+                        <div class="rs-placeholder-row">
+                            <rs-recipe-ingredients-form [form]="ingredient" [ingredientNumber]="$index + 1" [ingredients]="ingredientsReference()"></rs-recipe-ingredients-form>
+                            <button class="rs-btn rs-btn-outline" type="button" (click)="removeIngredient($index)" [disabled]="isReadonly()">Supprimer</button>
+                        </div>
+                        }
+                    </div>
+
+                    <button class="rs-btn rs-btn-outline" type="button" (click)="addIngredient()" [disabled]="isReadonly()">Ajouter un ingrédient</button>
+                </section>
+
+                <section class="rs-section" aria-labelledby="recipe-steps-title">
+                    <div class="rs-section-heading">
+                        <h2 id="recipe-steps-title">Étapes</h2>
+                        <p>Décrivez la préparation dans l'ordre. Les numéros sont recalculés automatiquement.</p>
+                    </div>
+
+                    <div class="rs-placeholder-list" formArrayName="steps">
+                        @for (step of steps.controls; track $index) {
+                        <div class="rs-placeholder-row">
+                            <rs-recipe-steps-form [form]="step" [stepNumber]="$index + 1"></rs-recipe-steps-form>
+                            <button class="rs-btn rs-btn-outline" type="button" (click)="removeStep($index)" [disabled]="isReadonly()">Supprimer</button>
+                        </div>
+                        }
+                    </div>
+
+                    <button class="rs-btn rs-btn-outline" type="button" (click)="addStep()" [disabled]="isReadonly()">Ajouter une étape</button>
+                </section>
+
+                <section class="rs-section" aria-labelledby="recipe-equipments-title">
+                    <div class="rs-section-heading">
+                        <h2 id="recipe-equipments-title">Ustensiles</h2>
+                        <p>Sélectionnez les ustensiles utiles à la recette.</p>
+                    </div>
+
+                    <div class="rs-placeholder-list" formArrayName="equipments">
+                        @for (equipment of equipmentsFormArray.controls; track $index) {
+                        <div class="rs-placeholder-row">
+                            <rs-recipe-equipments-form [form]="equipment" [equipmentNumber]="$index + 1" [equipments]="availableEquipmentOptions($index)"></rs-recipe-equipments-form>
+                            <button class="rs-btn rs-btn-outline" type="button" (click)="removeEquipment($index)" [disabled]="isReadonly()">Supprimer</button>
+                        </div>
+                        }
+                    </div>
+
+                    @if (errorMessage() === duplicateEquipmentMessage) {
+                    <p class="rs-field-error rs-field-error--block" role="alert">{{ duplicateEquipmentMessage }}</p>
+                    }
+
+                    <button class="rs-btn rs-btn-outline" type="button" (click)="addEquipment()" [disabled]="isReadonly()">Ajouter un ustensile</button>
+                </section>
+
+                <rs-recipe-tags-form [form]="form" [tags]="tags()" [readonly]="isReadonly()"></rs-recipe-tags-form>
+            </div>
+
+            <aside class="rs-form-sidebar" aria-label="Actions de la recette">
+                <section class="rs-section rs-section--sticky">
+                    <div class="rs-section-heading">
+                        <h2>Publication</h2>
+                        <p>Enregistrez d'abord les modifications, puis soumettez la recette à la modération.</p>
+                    </div>
+
+                    @if (successMessage()) {
+                    <p class="rs-field-success" role="status" aria-live="polite">{{ successMessage() }}</p>
+                    }
+
+                    @if (errorMessage()) {
+                    <p class="rs-field-error rs-field-error--block" role="alert">{{ errorMessage() }}</p>
+                    }
+
+                    <div class="rs-actions">
+                        <button class="rs-btn rs-btn-outline" type="submit" [disabled]="isReadonly() || !canSaveDraft || isSaving() || isSubmitting()">
+                            @if (isSaving()) {
+                            Enregistrement...
+                            } @else {
+                            Enregistrer en brouillon
+                            }
+                        </button>
+
+                        <button class="rs-btn rs-btn-primary" type="button" [disabled]="isReadonly() || !canSubmitPublication" (click)="onRequestPublication()">
+                            @if (isSubmitting()) {
+                            Soumission...
+                            } @else {
+                            Soumettre la recette
+                            }
+                        </button>
+
+                        @if(canArchiving()) {
+                        <button class="rs-btn rs-btn-primary" type="button" (click)="onRequestArchiving()" [disabled]="isSaving() || isSubmitting()">
+                            @if (isSubmitting()) {
+                            Archivage...
+                            } @else {
+                            Archiver la recette
+                            }
+                        </button>
+                        }
+                    </div>
+
+                    <div class="rs-checklist" aria-label="Pré-requis de soumission">
+                        <ul>
+                            @for (item of publicationChecklist(); track item.label) {
+                            <li [class.valid]="item.valid" [class.invalid]="!item.valid">
+                                <span aria-hidden="true">{{ item.valid ? 'Valide' : 'Non valide' }}</span>
+                                {{ item.label }}
+                            </li>
+                            }
+                        </ul>
+                    </div>
+                </section>
+            </aside>
+        </div>
+    </form>
+    }
+</section>

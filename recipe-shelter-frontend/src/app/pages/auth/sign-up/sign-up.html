@@ -1,0 +1,82 @@
+<rs-auth-shell panelTitle="Déjà un compte ?" [overlayStrength]="0.35" panelText="Connectez-vous pour enregistrer vos recettes favorites et partager les vôtres." panelCtaLabel="Connexion" panelCtaLink="/sign-in" panelImageUrl="/assets/images/auth/sign-up-hero.webp" panelAriaLabel="Aller vers la page de connexion">
+    <div auth-left>
+        <h1 class="rs-auth-card-title">Inscription</h1>
+
+        <form class="rs-form" [formGroup]="form" (ngSubmit)="onSubmit()" aria-label="Formulaire d'inscription">
+            <div class="rs-field">
+                <label for="name" class="rs-label">Nom <span aria-hidden="true">*</span></label>
+                <input id="name" type="text" class="rs-input" placeholder="Votre nom" autocomplete="name" formControlName="name" required />
+
+                @if (name.touched && name.hasError('required')) {
+                <p class="rs-field-error">Le nom est obligatoire</p>
+                }
+            </div>
+
+            <div class="rs-field">
+                <label for="email" class="rs-label">Email <span aria-hidden="true">*</span></label>
+                <input id="email" type="email" class="rs-input" placeholder="nom@company.com" autocomplete="email" formControlName="email" required />
+
+                @if (email.touched && email.hasError('required')) {
+                <p class="rs-field-error">L'email est obligatoire</p>
+                }
+
+                @if (email.touched && email.hasError('email')) {
+                <p class="rs-field-error">Le format de l'email est invalide</p>
+                }
+            </div>
+
+            <div class="rs-field">
+                <label for="password" class="rs-label">Mot de passe <span aria-hidden="true">*</span></label>
+                <input id="password" type="password" class="rs-input" placeholder="Min 8 caractères" autocomplete="new-password" formControlName="password" required />
+
+                @if (password.touched && password.hasError('required')) {
+                <p class="rs-field-error">Le mot de passe est obligatoire.</p>
+                }
+
+                @if (password.touched && password.hasError('passwordStrength')) {
+                <p class="rs-field-error">Utilisez au moins 8 caractères, avec majuscule, minuscule et chiffre.</p>
+                }
+            </div>
+
+            <div class="rs-field">
+                <label for="confirmPassword" class="rs-label">Confirmer le mot de passe <span aria-hidden="true">*</span></label>
+                <input id="confirmPassword" type="password" class="rs-input" placeholder="Répétez le mot de passe" autocomplete="new-password" formControlName="confirmPassword" required />
+
+                @if (confirmPassword.touched && confirmPassword.hasError('required')) {
+                <p class="rs-field-error">La confirmation est obligatoire.</p>
+                }
+
+                @if (passwordsDoNotMatch) {
+                <p class="rs-field-error">Les mots de passe ne correspondent pas.</p>
+                }
+            </div>
+
+            <div class="rs-field rs-consent-field">
+                <div class="rs-checkbox-row">
+                    <input id="termsAccepted" type="checkbox" class="rs-checkbox-input" formControlName="termsAccepted" required aria-describedby="termsAccepted-error" />
+                    <label for="termsAccepted" class="rs-checkbox-copy">
+                        J'accepte les
+                        <a routerLink="/terms" class="rs-auth-inline-link">Conditions Générales d'Utilisation</a>
+                        et reconnais avoir été informé que mes données personnelles seront utilisées tel que détaillé dans la
+                        <a routerLink="/privacy" class="rs-auth-inline-link">Politique de protection des données personnelles</a>
+                        <span aria-hidden="true"> *</span>
+                    </label>
+                </div>
+
+                @if (termsAccepted.touched && termsAccepted.hasError('required')) {
+                <p id="termsAccepted-error" class="rs-field-error">Vous devez accepter les conditions pour créer un compte.</p>
+                }
+            </div>
+
+            @if (apiError()) {
+            <p class="rs-field-error" role="alert">{{ apiError() }}</p>
+            }
+
+            <div class="rs-actions">
+                <button type="submit" class="rs-btn rs-btn-primary" [disabled]="isSubmitting()">
+                    {{ isSubmitting() ? 'Création...' : 'Créer mon compte' }}
+                </button>
+            </div>
+        </form>
+    </div>
+</rs-auth-shell>

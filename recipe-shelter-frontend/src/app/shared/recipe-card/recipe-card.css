@@ -1,0 +1,190 @@
+:host {
+    display: block;
+    min-width: 0;
+    height: 100%;
+}
+
+.rs-recipe-card,
+.rs-recipe-card h2,
+.rs-description {
+    margin: 0;
+}
+
+.rs-recipe-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    min-width: 0;
+    overflow: hidden;
+    border: 1px solid rgb(var(--rs-dark-rgb) / 0.10);
+    border-radius: 8px;
+    background: white;
+    box-shadow: 0 10px 24px rgb(0 0 0 / 0.04);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.rs-recipe-card:hover {
+    border-color: rgb(var(--rs-dark-rgb) / 0.16);
+    box-shadow:
+        0 12px 28px rgb(0 0 0 / 0.07),
+        0 28px 48px rgb(0 0 0 / 0.05);
+    transform: translateY(-1px);
+}
+
+.rs-recipe-card-link {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    height: 100%;
+    color: inherit;
+    text-decoration: none;
+}
+
+.rs-recipe-card-link:focus-visible {
+    outline: 3px solid var(--rs-focus-ring);
+    outline-offset: -3px;
+}
+
+.rs-recipe-image {
+    position: relative;
+    display: grid;
+    flex: 0 0 auto;
+    place-items: center;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    background: rgb(var(--rs-primary-rgb) / 0.08);
+    color: rgb(var(--rs-primary-rgb) / 0.52);
+    font-weight: 800;
+}
+
+.rs-recipe-image img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center center;
+}
+
+.rs-recipe-image .rs-recipe-cover-image {
+    object-position: center center;
+}
+
+.rs-favorite-badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 1;
+    display: inline-grid;
+    place-items: center;
+    width: 36px;
+    height: 36px;
+    border: 1px solid rgb(var(--rs-dark-rgb) / 0.12);
+    border-radius: 999px;
+    background: rgb(255 255 255 / 0.92);
+    color: rgb(var(--rs-dark-rgb) / 0.66);
+    cursor: pointer;
+    font-size: 1.05rem;
+    line-height: 1;
+    box-shadow: 0 8px 18px rgb(0 0 0 / 0.10);
+    transition: border-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+}
+
+.rs-favorite-badge:hover {
+    border-color: rgb(180 35 24 / 0.24);
+    color: #b42318;
+    transform: translateY(-1px);
+}
+
+.rs-favorite-badge:focus-visible {
+    outline: 3px solid var(--rs-focus-ring);
+    outline-offset: 2px;
+    box-shadow:
+        0 8px 18px rgb(0 0 0 / 0.10),
+        0 0 0 3px rgb(180 35 24 / 0.18);
+}
+
+.rs-favorite-badge:disabled {
+    cursor: wait;
+    opacity: 0.72;
+    transform: none;
+}
+
+.rs-favorite-badge--active {
+    border-color: rgb(180 35 24 / 0.18);
+    background: rgb(255 255 255 / 0.96);
+    color: #b42318;
+}
+
+.rs-recipe-card-body {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 12px;
+    min-width: 0;
+    padding: 16px;
+}
+
+.rs-recipe-card-heading {
+    display: grid;
+    gap: 8px;
+}
+
+.rs-category {
+    color: var(--rs-primary-dark);
+    font-size: 0.82rem;
+    font-weight: 800;
+}
+
+.rs-recipe-card h2 {
+    display: -webkit-box;
+    overflow: hidden;
+    color: rgb(var(--rs-dark-rgb) / 0.9);
+    font-size: 1.2rem;
+    font-weight: 700;
+    line-height: 1.35;
+    overflow-wrap: anywhere;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+}
+
+.rs-description {
+    display: -webkit-box;
+    overflow: hidden;
+    color: rgb(var(--rs-dark-rgb) / 0.66);
+    font-size: 0.95rem;
+    line-height: 1.55;
+    overflow-wrap: anywhere;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+}
+
+.rs-recipe-meta {
+    display: grid;
+    gap: 2px;
+    margin-top: auto;
+    color: rgb(var(--rs-dark-rgb) / 0.66);
+    font-size: 0.88rem;
+    line-height: 1.45;
+}
+
+.rs-recipe-meta-line {
+    display: flex;
+    flex-wrap: wrap;
+    min-width: 0;
+}
+
+.rs-recipe-meta-item {
+    display: inline-flex;
+    align-items: center;
+    min-width: 0;
+}
+
+.rs-recipe-meta-line .rs-recipe-meta-item + .rs-recipe-meta-item::before {
+    content: "\2022";
+    padding-inline: 8px;
+    color: rgb(var(--rs-dark-rgb) / 0.34);
+}

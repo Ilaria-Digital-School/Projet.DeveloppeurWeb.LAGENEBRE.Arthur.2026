@@ -1,0 +1,29 @@
+<div class="rs-ingredient-grid" [formGroup]="form">
+  <div class="rs-field">
+    <label class="rs-label" [attr.for]="quantityInputId">Quantité <span aria-hidden="true">*</span></label>
+    <input class="rs-input" [id]="quantityInputId" type="number" min="0" inputmode="decimal" formControlName="quantity" />
+    <span class="rs-field-error" [class.rs-field-error--hidden]="!shouldShowError('quantity')">Renseignez une quantité supérieure à 0.</span>
+  </div>
+
+  <div class="rs-field">
+    <label class="rs-label" [attr.for]="unitInputId">Unité</label>
+    <input class="rs-input" [id]="unitInputId" formControlName="unit" />
+    <span class="rs-field-error rs-field-error--hidden" aria-hidden="true">&nbsp;</span>
+  </div>
+
+  <div class="rs-field">
+    <label class="rs-label" [attr.for]="ingredientInputId">Ingrédient <span aria-hidden="true">*</span></label>
+    <select class="rs-input" [id]="ingredientInputId" formControlName="ingredientId">
+      <option [ngValue]="null">Sélectionnez un ingrédient</option>
+      @for (ingredient of ingredients; track ingredient.id) {
+      <option [ngValue]="ingredient.id">{{ ingredient.name }}</option>
+      }
+    </select>
+    <span class="rs-field-error" [class.rs-field-error--hidden]="!shouldShowError('ingredientId')">Renseignez un ingrédient valide.</span>
+  </div>
+
+  <div class="rs-field rs-field--note">
+    <label class="rs-label" [attr.for]="noteInputId">Note</label>
+    <input class="rs-input" [id]="noteInputId" formControlName="note" />
+  </div>
+</div>

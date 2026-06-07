@@ -1,0 +1,23 @@
+User-agent: *
+Allow: /
+
+# Bloquer les routes techniques inutiles
+Disallow: /assets/
+Disallow: /*.json$
+Disallow: /*.map$
+Disallow: /*.js.map$
+
+# Bloquer les paramètres de debug / tracking
+Disallow: /*?utm_*
+Disallow: /*?fbclid=*
+
+# Sécurité basique
+Disallow: /api/
+Disallow: /admin/
+Disallow: /auth/
+Disallow: /login/
+Disallow: /register/
+
+# Empêcher l’indexation de routes Angular techniques
+Disallow: /_angular/
+Disallow: /__ivy_ngcc__/

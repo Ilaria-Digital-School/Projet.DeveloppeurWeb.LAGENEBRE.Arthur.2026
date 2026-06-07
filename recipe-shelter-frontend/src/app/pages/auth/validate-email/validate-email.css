@@ -1,0 +1,22 @@
+@import "../../../shared/styles/components/auth-form.css";
+
+.rs-auth-status {
+    display: grid;
+    gap: 16px;
+}
+
+.rs-auth-status p {
+    margin: 0;
+}
+
+.rs-btn-outline {
+    border-color: rgb(var(--rs-primary-rgb) / 0.34);
+    background: white;
+    color: var(--rs-primary-dark);
+}
+
+.rs-btn-outline:hover {
+    border-color: rgb(var(--rs-primary-rgb) / 0.58);
+    background: rgb(var(--rs-primary-rgb) / 0.06);
+    color: var(--rs-primary-dark);
+}

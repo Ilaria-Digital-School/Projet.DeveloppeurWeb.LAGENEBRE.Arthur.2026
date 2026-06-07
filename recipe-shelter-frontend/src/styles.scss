@@ -1,0 +1,65 @@
+/* Bootstrap - uniquement les modules necessaires */
+@import "bootstrap/scss/functions";
+@import "bootstrap/scss/variables";
+@import "bootstrap/scss/variables-dark";
+@import "bootstrap/scss/maps";
+@import "bootstrap/scss/mixins";
+@import "bootstrap/scss/utilities";
+
+/* Modules reellement utilises dans le projet */
+@import "bootstrap/scss/root";
+@import "bootstrap/scss/reboot";
+@import "bootstrap/scss/containers";
+@import "bootstrap/scss/transitions";
+@import "bootstrap/scss/nav";
+@import "bootstrap/scss/navbar";
+@import "bootstrap/scss/dropdown";
+@import "bootstrap/scss/buttons";
+@import "bootstrap/scss/helpers";
+@import "bootstrap/scss/utilities/api";
+
+/* Styles globaux existants */
+@import "./app/shared/styles/components/buttons.css";
+
+:root {
+  --rs-primary: #384688;
+  --rs-primary-rgb: 56 70 136;
+
+  --rs-primary-dark: #2c376d;
+  --rs-primary-dark-rgb: 44 55 109;
+
+  --rs-accent: #fcc417;
+  --rs-accent-rgb: 252 196 23;
+
+  --rs-accent-dark: #e3b015;
+  --rs-accent-dark-rgb: 227 176 21;
+
+  --rs-focus-ring: #2c376d;
+
+  --rs-cream: #f8f5f2;
+  --rs-cream-rgb: 248 245 242;
+
+  --rs-dark: #1e1e1e;
+  --rs-dark-rgb: 30 30 30;
+
+  --rs-link: #333;
+  --rs-link-rgb: 51 51 51;
+
+  --rs-header-h: 72px;
+}
+
+:focus-visible {
+  outline: 3px solid var(--rs-focus-ring);
+  outline-offset: 3px;
+}
+
+::placeholder {
+  color: rgb(var(--rs-dark-rgb) / 0.62);
+  opacity: 1;
+}
+
+.rs-main {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: clamp(24px, 4vw, 48px) clamp(16px, 3vw, 28px);
+}

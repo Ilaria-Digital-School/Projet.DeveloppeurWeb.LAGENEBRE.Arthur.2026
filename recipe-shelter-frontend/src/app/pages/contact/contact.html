@@ -1,0 +1,132 @@
+<section class="rs-contact">
+    <div class="rs-contact-inner">
+
+        <aside class="rs-contact-panel" aria-label="Informations de contact">
+            <h1 class="rs-contact-title">Parlons cuisine</h1>
+
+            <p class="rs-contact-lead">
+                Une question sur le site, une recette à améliorer ou une idée à proposer ?
+                Écris-nous : on répond dès que possible.
+            </p>
+
+            <div class="rs-contact-highlights" role="list">
+                <div class="rs-contact-item" role="listitem">
+                    <span class="rs-contact-dot" aria-hidden="true"></span>
+                    <div>
+                        <div class="rs-contact-item-title">Support & retours</div>
+                        <div class="rs-contact-item-text">Bug, suggestion, amélioration UX.</div>
+                    </div>
+                </div>
+
+                <div class="rs-contact-item" role="listitem">
+                    <span class="rs-contact-dot" aria-hidden="true"></span>
+                    <div>
+                        <div class="rs-contact-item-title">Partage de recettes</div>
+                        <div class="rs-contact-item-text">Idées, collaboration, contenu.</div>
+                    </div>
+                </div>
+
+                <div class="rs-contact-item" role="listitem">
+                    <span class="rs-contact-dot" aria-hidden="true"></span>
+                    <div>
+                        <div class="rs-contact-item-title">Réponse humaine</div>
+                        <div class="rs-contact-item-text">Pas de robot, juste nous.</div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <section class="rs-contact-card" aria-label="Formulaire de contact">
+            <h2 class="rs-contact-card-title">Envoyer un message</h2>
+            <p class="rs-contact-card-subtitle">Les champs marqués <span aria-hidden="true">*</span> sont obligatoires.</p>
+
+            <form class="rs-form" [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+                <div class="rs-grid">
+                    <div class="rs-field">
+                        <label class="rs-label" for="name">Nom <span aria-hidden="true">*</span></label>
+                        <input class="rs-input" id="name" type="text" placeholder="Votre nom" autocomplete="name" formControlName="name" minlength="2" maxlength="100" required />
+
+                        @if (name.touched && name.hasError('required')) {
+                        <p class="rs-field-error">Le nom est obligatoire.</p>
+                        }
+
+                        @if (name.touched && name.hasError('minlength')) {
+                        <p class="rs-field-error">Le nom doit contenir au moins 2 caractères.</p>
+                        }
+
+                        @if (name.touched && name.hasError('maxlength')) {
+                        <p class="rs-field-error">Le nom doit contenir 100 caractères maximum.</p>
+                        }
+                    </div>
+
+                    <div class="rs-field">
+                        <label class="rs-label" for="email">Email <span aria-hidden="true">*</span></label>
+                        <input class="rs-input" id="email" type="email" placeholder="nom@email.fr" autocomplete="email" inputmode="email" formControlName="email" maxlength="255" required />
+
+                        @if (email.touched && email.hasError('required')) {
+                        <p class="rs-field-error">L'email est obligatoire.</p>
+                        }
+
+                        @if (email.touched && email.hasError('email')) {
+                        <p class="rs-field-error">Veuillez saisir une adresse email valide.</p>
+                        }
+
+                        @if (email.touched && email.hasError('maxlength')) {
+                        <p class="rs-field-error">L'email doit contenir 255 caractères maximum.</p>
+                        }
+                    </div>
+                </div>
+
+                <div class="rs-field">
+                    <label class="rs-label" for="subject">Sujet <span aria-hidden="true">*</span></label>
+                    <input class="rs-input" id="subject" type="text" placeholder="Ex : suggestion d'amélioration" autocomplete="off" formControlName="subject" minlength="3" maxlength="150" required />
+
+                    @if (subject.touched && subject.hasError('required')) {
+                    <p class="rs-field-error">Le sujet est obligatoire.</p>
+                    }
+
+                    @if (subject.touched && subject.hasError('minlength')) {
+                    <p class="rs-field-error">Le sujet doit contenir au moins 3 caractères.</p>
+                    }
+
+                    @if (subject.touched && subject.hasError('maxlength')) {
+                    <p class="rs-field-error">Le sujet doit contenir 150 caractères maximum.</p>
+                    }
+                </div>
+
+                <div class="rs-field">
+                    <label class="rs-label" for="message">Message <span aria-hidden="true">*</span></label>
+                    <textarea class="rs-textarea" id="message" rows="6" placeholder="Décris ta demande..." formControlName="message" minlength="10" maxlength="5000" required></textarea>
+
+                    @if (message.touched && message.hasError('required')) {
+                    <p class="rs-field-error">Le message est obligatoire.</p>
+                    }
+
+                    @if (message.touched && message.hasError('minlength')) {
+                    <p class="rs-field-error">Le message doit contenir au moins 10 caractères.</p>
+                    }
+
+                    @if (message.touched && message.hasError('maxlength')) {
+                    <p class="rs-field-error">Le message doit contenir 5000 caractères maximum.</p>
+                    }
+                </div>
+
+                @if (successMessage()) {
+                <p class="rs-field-success" role="status" aria-live="polite">{{ successMessage() }}</p>
+                }
+
+                @if (errorMessage()) {
+                <p class="rs-field-error rs-field-error--block" role="alert">{{ errorMessage() }}</p>
+                }
+
+                <div class="rs-actions">
+                    <button class="rs-btn rs-btn-primary" type="submit" [disabled]="isSubmitting()">
+                        {{ isSubmitting() ? 'Envoi...' : 'Envoyer' }}
+                    </button>
+                    <p class="rs-hint">En envoyant ce message, tu acceptes que nous utilisions ton email uniquement pour te répondre.</p>
+                </div>
+            </form>
+        </section>
+
+    </div>
+</section>

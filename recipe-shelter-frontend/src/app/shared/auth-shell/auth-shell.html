@@ -1,0 +1,23 @@
+<section class="rs-auth">
+    <div class="rs-auth-inner">
+
+        <aside class="rs-auth-card" aria-label="Formulaire">
+            <ng-content select="[auth-left]"></ng-content>
+        </aside>
+
+        <section class="rs-auth-panel" [ngStyle]="panelBackgroundStyle" [attr.aria-label]="panelAriaLabel">
+            <div class="rs-auth-panel-overlay">
+                <h2 class="rs-auth-panel-title">{{ panelTitle }}</h2>
+
+                @if (panelText) {
+                    <p class="rs-auth-panel-text">{{ panelText }}</p>
+                }
+
+                <a [routerLink]="panelCtaLink" class="rs-btn rs-btn-primary rs-auth-panel-cta">{{ panelCtaLabel }}</a>
+
+                <ng-content select="[auth-right-extra]"></ng-content>
+            </div>
+        </section>
+
+    </div>
+</section>

@@ -1,0 +1,91 @@
+<section class="rs-admin-dashboard">
+    <header class="rs-page-header">
+        <h1>Tableau de bord administrateur</h1>
+    </header>
+
+    <div class="rs-dashboard-grid">
+        <article class="rs-dashboard-card">
+            <div class="rs-card-heading">
+                <h2>État du serveur</h2>
+                <span class="rs-status-badge" [class.rs-status-badge--ok]="healthStatus() === 'OK'">{{ healthStatus() }}</span>
+            </div>
+
+            <div class="rs-check-row">
+                <span>Base de données</span>
+                <span class="rs-status-badge" [class.rs-status-badge--ok]="databaseStatus() === 'OK'">{{ databaseStatus() }}</span>
+            </div>
+        </article>
+
+        <article class="rs-dashboard-card">
+            <div class="rs-card-heading">
+                <h2>Recettes en attente</h2>
+            </div>
+
+            @if (isPendingRecipesLoading()) {
+            <p class="rs-card-value" aria-live="polite">Chargement...</p>
+            } @else {
+            <p class="rs-card-value">{{ pendingRecipesCount() }}</p>
+            }
+
+            @if (pendingRecipesError()) {
+            <p class="rs-error-message" role="alert">{{ pendingRecipesError() }}</p>
+            }
+
+            <a class="rs-btn rs-btn-outline" routerLink="/admin/recipes">Voir les recettes en attente</a>
+        </article>
+
+        <article class="rs-dashboard-card">
+            <div class="rs-card-heading">
+                <h2>Commentaires modérés</h2>
+            </div>
+
+            @if (isModeratedCommentsLoading()) {
+            <p class="rs-card-value" aria-live="polite">Chargement...</p>
+            } @else {
+            <p class="rs-card-value">{{ moderatedCommentsCount() }}</p>
+            }
+
+            @if (moderatedCommentsError()) {
+            <p class="rs-error-message" role="alert">{{ moderatedCommentsError() }}</p>
+            }
+
+            <a class="rs-btn rs-btn-outline" routerLink="/admin/comments/moderated">Voir les commentaires modérés</a>
+        </article>
+
+        <article class="rs-dashboard-card">
+            <div class="rs-card-heading">
+                <h2>Commentaires supprimés</h2>
+            </div>
+
+            @if (isSoftDeletedCommentsLoading()) {
+            <p class="rs-card-value" aria-live="polite">Chargement...</p>
+            } @else {
+            <p class="rs-card-value">{{ softDeletedCommentsCount() }}</p>
+            }
+
+            @if (softDeletedCommentsError()) {
+            <p class="rs-error-message" role="alert">{{ softDeletedCommentsError() }}</p>
+            }
+
+            <a class="rs-btn rs-btn-outline" routerLink="/admin/comments/soft-deleted">Voir les commentaires supprimés</a>
+        </article>
+
+        <article class="rs-dashboard-card">
+            <div class="rs-card-heading">
+                <h2>Utilisateurs suspendus</h2>
+            </div>
+
+            @if (isBannedUsersLoading()) {
+            <p class="rs-card-value" aria-live="polite">Chargement...</p>
+            } @else {
+            <p class="rs-card-value">{{ bannedUsersCount() }}</p>
+            }
+
+            @if (bannedUsersError()) {
+            <p class="rs-error-message" role="alert">{{ bannedUsersError() }}</p>
+            }
+
+            <a class="rs-btn rs-btn-outline" routerLink="/admin/users/banned">Voir les utilisateurs suspendus</a>
+        </article>
+    </div>
+</section>

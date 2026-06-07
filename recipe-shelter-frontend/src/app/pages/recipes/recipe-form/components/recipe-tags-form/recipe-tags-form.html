@@ -1,0 +1,29 @@
+<section class="rs-section" aria-labelledby="recipe-tags-title">
+    <div class="rs-section-heading">
+        <h2 id="recipe-tags-title">Tags</h2>
+        <p>Ajoutez quelques mots-clés pour faciliter la recherche.</p>
+    </div>
+
+    @if (tags.length === 0) {
+    <p>Aucun tag disponible pour le moment.</p>
+    } @else {
+    <div class="rs-tag-list" role="group" aria-labelledby="recipe-tags-title">
+        @for (tag of tags; track tag.id) {
+        <label class="rs-tag-option" [attr.for]="'recipe-tag-' + tag.id" [class.rs-tag-option--selected]="isTagSelected(tag.id)">
+            <input [id]="'recipe-tag-' + tag.id" type="checkbox" [checked]="isTagSelected(tag.id)" (change)="toggleTag(tag.id, $any($event.target).checked)" [disabled]="readonly">
+            <span>{{ tag.name }}</span>
+        </label>
+        }
+    </div>
+    }
+
+    @if (selectedTags.length > 0) {
+    <div class="rs-selected-tags" aria-label="Tags sélectionnés">
+        @for (tag of selectedTags; track tag.id) {
+        <span>{{ tag.name }}</span>
+        }
+    </div>
+    } @else {
+    <p class="rs-muted">Aucun tag sélectionné.</p>
+    }
+</section>

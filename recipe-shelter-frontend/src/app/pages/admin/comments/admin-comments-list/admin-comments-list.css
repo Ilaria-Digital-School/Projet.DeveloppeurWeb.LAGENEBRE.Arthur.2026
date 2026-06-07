@@ -1,0 +1,142 @@
+.rs-admin-comments-grid {
+    display: grid;
+    gap: 14px;
+}
+
+.rs-comment-card {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(210px, auto);
+    gap: 18px;
+    align-items: start;
+    padding: 18px;
+    border: 1px solid rgb(var(--rs-dark-rgb) / 0.10);
+    border-radius: 8px;
+    background: white;
+    box-shadow: 0 10px 24px rgb(0 0 0 / 0.04);
+}
+
+.rs-comment-main {
+    display: grid;
+    min-width: 0;
+    gap: 14px;
+}
+
+.rs-comment-heading {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.rs-comment-heading h2,
+.rs-comment-content,
+.rs-comment-meta {
+    margin: 0;
+}
+
+.rs-comment-heading h2 {
+    color: rgb(var(--rs-dark-rgb) / 0.9);
+    font-size: 1.12rem;
+    line-height: 1.35;
+    overflow-wrap: anywhere;
+}
+
+.rs-comment-heading a {
+    color: var(--rs-primary-dark);
+    font-size: 0.94rem;
+    font-weight: 650;
+    overflow-wrap: anywhere;
+}
+
+.rs-rating {
+    display: inline-flex;
+    align-items: center;
+    height: fit-content;
+    padding: 6px 10px;
+    border: 1px solid rgb(var(--rs-primary-rgb) / 0.22);
+    border-radius: 999px;
+    background: rgb(var(--rs-primary-rgb) / 0.07);
+    color: var(--rs-primary-dark);
+    font-size: 0.86rem;
+    font-weight: 700;
+}
+
+.rs-comment-content {
+    color: rgb(var(--rs-dark-rgb) / 0.72);
+    line-height: 1.6;
+    overflow-wrap: anywhere;
+    white-space: pre-wrap;
+}
+
+.rs-comment-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 16px;
+}
+
+.rs-comment-meta div {
+    display: grid;
+    gap: 2px;
+}
+
+.rs-comment-meta dt {
+    color: rgb(var(--rs-dark-rgb) / 0.66);
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.rs-comment-meta dd {
+    margin: 0;
+    color: rgb(var(--rs-dark-rgb) / 0.72);
+    font-size: 0.9rem;
+}
+
+.rs-comment-actions {
+    display: grid;
+    gap: 10px;
+}
+
+.rs-btn[disabled] {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.rs-btn-outline {
+    border-color: rgb(var(--rs-primary-rgb) / 0.34);
+    background: white;
+    color: var(--rs-primary-dark);
+}
+
+.rs-btn-danger-outline {
+    border-color: rgb(180 35 24 / 0.32);
+    background: white;
+    color: #b42318;
+}
+
+.rs-btn-outline:hover,
+.rs-btn-danger-outline:hover {
+    transform: translateY(-1px);
+}
+
+.rs-btn-outline:hover {
+    border-color: rgb(var(--rs-primary-rgb) / 0.58);
+    background: rgb(var(--rs-primary-rgb) / 0.06);
+}
+
+.rs-btn-danger-outline:hover {
+    border-color: rgb(180 35 24 / 0.5);
+    background: rgb(180 35 24 / 0.06);
+}
+
+@media (max-width: 760px) {
+    .rs-comment-card {
+        grid-template-columns: 1fr;
+        padding: 16px;
+    }
+
+    .rs-comment-actions,
+    .rs-comment-actions .rs-btn {
+        width: 100%;
+    }
+}

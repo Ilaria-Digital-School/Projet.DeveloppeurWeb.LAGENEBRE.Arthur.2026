@@ -1,0 +1,17 @@
+<rs-auth-shell panelTitle="Connexion" [overlayStrength]="0.32" panelText="Votre compte est activé ?" panelCtaLabel="Se connecter" panelCtaLink="/sign-in" panelImageUrl="/assets/images/auth/sign-in-hero.webp" panelAriaLabel="Aller vers la page de connexion">
+    <div auth-left>
+        <h1 class="rs-auth-card-title">Validation email</h1>
+
+        <section class="rs-auth-status" aria-live="polite">
+            @if (state() === 'loading') {
+            <p>Activation de votre compte...</p>
+            } @else if (state() === 'success') {
+            <p class="rs-field-success">{{ message() }}</p>
+            <a routerLink="/sign-in" class="rs-btn rs-btn-primary">Aller à la connexion</a>
+            } @else {
+            <p class="rs-field-error" role="alert">{{ message() }}</p>
+            <a routerLink="/auth/resend-validation-email" class="rs-btn rs-btn-outline">Recevoir un nouveau lien</a>
+            }
+        </section>
+    </div>
+</rs-auth-shell>

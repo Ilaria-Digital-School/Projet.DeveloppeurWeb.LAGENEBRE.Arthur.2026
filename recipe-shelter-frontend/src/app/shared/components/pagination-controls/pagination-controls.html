@@ -1,0 +1,5 @@
+<nav class="rs-pagination-controls" aria-label="Pagination">
+    <button type="button" class="rs-btn rs-btn-outline" [disabled]="disabled || !pagination.hasPreviousPage" (click)="onPrevious()">Précédent</button>
+    <p class="rs-pagination-info" aria-live="polite">Page {{ pagination.page }} / {{ totalPagesLabel }}</p>
+    <button type="button" class="rs-btn rs-btn-outline" [disabled]="disabled || !pagination.hasNextPage" (click)="onNext()">Suivant</button>
+</nav>

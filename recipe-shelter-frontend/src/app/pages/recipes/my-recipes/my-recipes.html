@@ -1,0 +1,61 @@
+<section class="rs-my-recipes">
+    <header class="rs-page-header">
+        <div>
+            <h1>Mes recettes</h1>
+            <p>Retrouvez vos brouillons, recettes soumises et recettes publiées.</p>
+        </div>
+
+        <a class="rs-btn rs-btn-primary" [routerLink]="['/me/recipes/submit']">Créer une recette</a>
+    </header>
+
+    @if (isLoading()) {
+    <section class="rs-state-card" aria-live="polite">
+        <p>Chargement de vos recettes...</p>
+    </section>
+    } @else if (errorMessage()) {
+    <section class="rs-state-card rs-state-card--error" aria-live="polite">
+        <p>{{ errorMessage() }}</p>
+    </section>
+    } @else if (recipes().length === 0) {
+    <section class="rs-state-card rs-state-card--empty">
+        <h2>Vous n'avez pas encore créé de recette.</h2>
+        <p>Commencez par créer votre première recette.</p>
+    </section>
+    } @else {
+    <div class="rs-recipes-grid" aria-label="Liste de mes recettes">
+        @for (recipe of recipes(); track recipe.id) {
+        <article class="rs-recipe-card">
+            <div class="rs-recipe-card-main">
+                <div class="rs-recipe-card-heading">
+                    <h2>{{ recipe.title }}</h2>
+                    <span class="rs-status-badge {{ getStatusClass(recipe.status) }}">
+                        {{ getStatusLabel(recipe.status) }}
+                    </span>
+                </div>
+
+                <div class="rs-recipe-meta" aria-label="Informations de la recette">
+                    @if (recipe.category) {
+                    <span class="rs-recipe-meta-item">{{ recipe.category }}</span>
+                    }
+
+                    @for (dateItem of getDateItems(recipe); track dateItem.label) {
+                    <span class="rs-recipe-meta-item">
+                        {{ dateItem.label }} {{ dateItem.value | date: 'dd/MM/yyyy' }}
+                    </span>
+                    }
+                </div>
+
+                @if (recipe.status === 'rejected' && recipe.rejectionReason) {
+                <p class="rs-rejection-reason">{{ recipe.rejectionReason }}</p>
+                }
+            </div>
+
+            <div class="rs-recipe-actions">
+                <a class="rs-btn rs-btn-outline" [routerLink]="['/me/recipes/submit', recipe.id]">{{ getActionLabel(recipe.status) }}</a>
+            </div>
+        </article>
+        }
+    </div>
+    <rs-pagination-controls [pagination]="pagination()" (pageChange)="onPageChange($event)" />
+    }
+</section>

@@ -1,0 +1,177 @@
+<section class="rs-admin-user">
+    <a class="rs-back-link" routerLink="/admin/dashboard">← Retour au tableau de bord</a>
+
+    @if (successMessage()) {
+    <section class="rs-state-card rs-state-card--success" aria-live="polite">
+        <p>{{ successMessage() }}</p>
+    </section>
+    }
+
+    @if (isLoading()) {
+    <section class="rs-state-card" aria-live="polite">
+        <p>Chargement de l'utilisateur...</p>
+    </section>
+    } @else if (notFound()) {
+    <section class="rs-state-card">
+        <h1>Utilisateur introuvable</h1>
+        <p>Cet utilisateur n'existe pas ou n'est plus disponible pour l'administration.</p>
+    </section>
+    } @else if (errorMessage() && !user()) {
+    <section class="rs-state-card rs-state-card--error" aria-live="polite">
+        <h1>Impossible de charger l'utilisateur</h1>
+        <p>{{ errorMessage() }}</p>
+    </section>
+    } @else if (user(); as user) {
+    <header class="rs-user-header">
+        <div>
+            <h1>Fiche utilisateur</h1>
+        </div>
+    </header>
+
+    @if (errorMessage()) {
+    <p class="rs-error-message" role="alert">{{ errorMessage() }}</p>
+    }
+
+    <div class="rs-user-layout">
+        <main class="rs-user-content">
+            <section class="rs-card">
+                <h2>Informations utilisateur</h2>
+
+                <dl class="rs-info-grid">
+                    <div>
+                        <dt>Username</dt>
+                        <dd>{{ user.username }}</dd>
+                    </div>
+
+                    <div>
+                        <dt>Email</dt>
+                        <dd>{{ getEmail(user) }}</dd>
+                    </div>
+
+                    <div>
+                        <dt>Créé le</dt>
+                        <dd>{{ user.createdAt | date: 'dd/MM/yyyy HH:mm' }}</dd>
+                    </div>
+
+                    <div>
+                        <dt>Mis à jour le</dt>
+                        <dd>{{ user.updatedAt | date: 'dd/MM/yyyy HH:mm' }}</dd>
+                    </div>
+                </dl>
+            </section>
+
+            @if (user.status === 'banned') {
+            <section class="rs-card">
+                <h2>Bannissement actuel</h2>
+
+                <dl class="rs-info-grid">
+                    <div class="rs-info-grid__wide">
+                        <dt>Raison</dt>
+                        <dd>{{ getBanReason(user) }}</dd>
+                    </div>
+
+                    <div>
+                        <dt>Banni le</dt>
+                        <dd>{{ user.bannedAt | date: 'dd/MM/yyyy HH:mm' }}</dd>
+                    </div>
+
+                    <div>
+                        <dt>Modérateur</dt>
+                        <dd>{{ getBanModerator(user) }}</dd>
+                    </div>
+                </dl>
+            </section>
+            }
+
+            <section class="rs-card">
+                <h2>Historique de modération</h2>
+
+                @if (getModerationLogs(user).length === 0) {
+                <p class="rs-muted">Aucun log de modération disponible.</p>
+                } @else {
+                <ol class="rs-log-list">
+                    @for (log of getModerationLogs(user); track log.id) {
+                    <li>
+                        <div>
+                            <strong>{{ getModerationActionLabel(log.action) }}</strong>
+                            <span> {{ log.createdAt | date: 'dd/MM/yyyy HH:mm' }}</span>
+                        </div>
+
+                        <p>{{ log.reason }}</p>
+                        <small>Par {{ getModerationActor(log) }}</small>
+                    </li>
+                    }
+                </ol>
+                }
+            </section>
+        </main>
+
+        <aside class="rs-moderation-panel" aria-label="Panneau de modération utilisateur">
+            <section class="rs-card rs-card--sticky">
+                <h2>Modération</h2>
+
+                <div class="rs-status-row">
+                    <span>Statut actuel</span>
+                    <strong>{{ getStatusLabel(user.status) }}</strong>
+                </div>
+
+                @if (user.status === 'inactive') {
+                <p class="rs-info-message">Ce compte est en attente d'activation.</p>
+                }
+
+                @if (!activeForm()) {
+                @if (isActive()) {
+                <button class="rs-btn rs-btn-danger" type="button" [disabled]="isSubmitting()" (click)="openModerationForm('ban')">
+                    {{ isSubmitting() ? 'Traitement...' : 'Bannir' }}
+                </button>
+                }
+
+                @if (isBanned()) {
+                <button class="rs-btn rs-btn-outline" type="button" [disabled]="isSubmitting()" (click)="openModerationForm('unban')">
+                    @if (isSubmitting()) {
+                    Traitement...
+                    } @else {
+                    Débannir
+                    }
+                </button>
+                }
+                }
+
+                @if (activeForm(); as formMode) {
+                <form class="rs-moderation-form" (ngSubmit)="submitModeration()">
+                    <label class="rs-label" for="moderationReason">
+                        @if (formMode === 'ban') {
+                        Raison du bannissement
+                        } @else {
+                        Raison du débannissement
+                        }
+                    </label>
+
+                    <textarea class="rs-textarea" id="moderationReason" name="moderationReason" rows="6"
+                        [ngModel]="moderationReason()" (ngModelChange)="updateModerationReason($event)"
+                        [attr.maxlength]="maxReasonLength" [disabled]="isSubmitting()"></textarea>
+
+                    <p class="rs-hint">
+                        {{ moderationReasonLength() }} / {{ maxReasonLength }} caractères. Minimum {{ minReasonLength }}.
+                    </p>
+
+                    @if (moderationErrorMessage()) {
+                    <p class="rs-field-error" role="alert">{{ moderationErrorMessage() }}</p>
+                    }
+
+                    <div class="rs-form-actions">
+                        <button class="rs-btn rs-btn-primary" type="submit" [disabled]="!canSubmitModeration()">
+                            {{ isSubmitting() ? 'Traitement...' : 'Confirmer' }}
+                        </button>
+
+                        <button class="rs-btn rs-btn-outline" type="button" [disabled]="isSubmitting()" (click)="cancelModerationForm()">
+                            Annuler
+                        </button>
+                    </div>
+                </form>
+                }
+            </section>
+        </aside>
+    </div>
+    }
+</section>

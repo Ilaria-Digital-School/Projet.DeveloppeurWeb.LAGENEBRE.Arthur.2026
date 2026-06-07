@@ -1,0 +1,352 @@
+<section class="rs-recipe-detail">
+    <a class="rs-back-link" routerLink="/recipes">← Retour aux recettes</a>
+
+    @if (isLoading()) {
+    <div class="rs-recipe-detail-skeleton" aria-busy="true">
+        <div class="rs-skeleton rs-skeleton-title"></div>
+        <div class="rs-skeleton rs-skeleton-image"></div>
+        <div class="rs-skeleton rs-skeleton-line"></div>
+        <div class="rs-skeleton rs-skeleton-line rs-skeleton-line--short"></div>
+        <div class="rs-skeleton rs-skeleton-line"></div>
+    </div>
+    } @else if (errorMessage()) {
+    <section class="rs-state-card rs-state-card--error" aria-live="polite">
+        <p>{{ errorMessage() }}</p>
+    </section>
+    } @else if (recipe(); as recipe) {
+    <article class="rs-recipe">
+        <header class="rs-recipe-hero">
+            <div class="rs-recipe-hero-content">
+                @if (recipe.category) {
+                <span class="rs-category">{{ recipe.category }}</span>
+                }
+
+                <div class="rs-recipe-title-row">
+                    <h1>{{ recipe.title }}</h1>
+
+                    <button type="button" class="rs-favorite-button" [class.rs-favorite-button--active]="recipe.isFavorite" [disabled]="isFavoriteUpdating()" [attr.aria-label]="recipe.isFavorite ? 'Retirer des favoris' : 'Ajouter aux favoris'" (click)="onFavoriteClick(recipe)">
+                        @if (recipe.isFavorite) {
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+                            <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314"/>
+                        </svg>
+                        } @else {
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+                            <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01z"/>
+                        </svg>
+                        }
+                    </button>
+                </div>
+
+                @if (recipe.description) {
+                <p class="rs-description">{{ recipe.description }}</p>
+                }
+
+                <div class="rs-recipe-meta" aria-label="Informations de la recette">
+                    @for (part of getTimeParts(recipe); track part) {
+                    <span class="rs-recipe-meta-item">{{ part }}</span>
+                    }
+
+                    @if (recipe.servings) {
+                    <span class="rs-recipe-meta-item">{{ recipe.servings }} portions</span>
+                    }
+
+                    @if (isAdmin()) {
+                    <span class="rs-recipe-meta-item">Par <a class="rs-btn rs-btn-outline" [routerLink]="['/admin/users', recipe.author.id]">{{ recipe.author.username }}</a></span>
+                    } @else {
+                    <span class="rs-recipe-meta-item">Par <a class="rs-btn rs-btn-outline" [routerLink]="['/users', recipe.author.username]">{{ recipe.author.username }}</a></span>
+                    }
+                    <span class="rs-recipe-meta-item">{{ recipe.publishedAt | date: 'dd/MM/yyyy' }}</span>
+                </div>
+
+                @if (recipe.tags.length > 0) {
+                <ul class="rs-chip-list rs-recipe-tags" aria-label="Tags">
+                    @for (tag of recipe.tags; track $index) {
+                    <li>{{ tag.name }}</li>
+                    }
+                </ul>
+                }
+            </div>
+
+            @if (recipe.coverImageUrl) {
+            <div class="rs-recipe-cover-frame">
+                <img class="rs-recipe-cover" [src]="recipe.coverImageUrl" [alt]="recipe.title" width="720" height="540" fetchpriority="high">
+            </div>
+            }
+        </header>
+
+        <div class="rs-recipe-content">
+            <div class="rs-recipe-layout">
+                <aside class="rs-recipe-sidebar" aria-label="Ingrédients et ustensiles">
+                    <section class="rs-detail-section">
+                        <h2>Ingrédients</h2>
+
+                        <ul class="rs-ingredients">
+                            @for (ingredient of recipe.ingredients; track $index) {
+                            <li>
+                                <span>{{ getIngredientLabel(ingredient) }}</span>
+                                @if (ingredient.note) {
+                                <small>{{ ingredient.note }}</small>
+                                }
+                            </li>
+                            }
+                        </ul>
+                    </section>
+
+                    <section class="rs-detail-section">
+                        <h2>Ustensiles</h2>
+
+                        @if (recipe.equipments.length === 0) {
+                        <p class="rs-muted">Aucun ustensiles renseigné.</p>
+                        } @else {
+                        <ul class="rs-chip-list">
+                            @for (equipment of recipe.equipments; track $index) {
+                            <li>{{ equipment.name }}</li>
+                            }
+                        </ul>
+                        }
+                    </section>
+                </aside>
+
+                <div class="rs-recipe-main">
+                    <section class="rs-detail-section">
+                        <h2>Étapes</h2>
+
+                        <ol class="rs-steps">
+                            @for (step of recipe.steps; track $index) {
+                            <li>
+                                <span>{{ step.stepNumber }}</span>
+                                <p>{{ step.description }}</p>
+                            </li>
+                            }
+                        </ol>
+                    </section>
+                </div>
+            </div>
+
+            <section class="rs-detail-section rs-comments-section" aria-labelledby="recipeCommentsTitle">
+                <div class="rs-comments-heading">
+                    <div>
+                        <h2 id="recipeCommentsTitle">Commentaires</h2>
+                        <p class="rs-muted">{{ getCommentsCountLabel(recipe.commentsCount) }}</p>
+                    </div>
+
+                    <div class="rs-rating-summary" aria-label="Note moyenne">
+                        <strong>{{ getAverageRatingLabel(recipe.averageRating) }}</strong>
+                        <span>{{ getRatingsCountLabel(recipe.ratingsCount) }}</span>
+                    </div>
+                </div>
+
+                @if (recipe.comments.length === 0) {
+                <p class="rs-muted">Aucun commentaire pour le moment.</p>
+                } @else {
+                <div class="rs-comments-list">
+                    @for (comment of recipe.comments; track comment.id) {
+                    <article class="rs-comment" [class.rs-comment--unavailable]="isCommentUnavailable(comment)">
+                        <header class="rs-comment-header">
+                            <div>
+                                @if (isAdmin()) {
+                                <strong><a class="rs-btn rs-btn-outline" [routerLink]="['/admin/users', comment.author.id]">{{ comment.author.username }}</a></strong>
+                                } @else {
+                                <strong><a class="rs-btn rs-btn-outline" [routerLink]="['/users', comment.author.username]">{{ comment.author.username }}</a></strong>
+                                }
+                                <span>{{ comment.createdAt | date: 'dd/MM/yyyy' }}</span>
+                            </div>
+
+                            @if (comment.rating && !comment.parentCommentId) {
+                            <span class="rs-comment-rating">{{ comment.rating }} / 5</span>
+                            }
+                        </header>
+
+                        @if (comment.isDeleted) {
+                        <p class="rs-comment-body">Ce commentaire a été supprimé.</p>
+                        } @else if (comment.isModerated) {
+                        <p class="rs-comment-body">Ce commentaire a été modéré.</p>
+                        } @else if (editCommentId() === comment.id) {
+                        <form class="rs-comment-form rs-edit-form" [formGroup]="editCommentForm" (ngSubmit)="submitEdit(comment)" novalidate>
+                            <div class="rs-comment-form-row">
+                                <div class="rs-field">
+                                    <label [attr.for]="'edit-comment-rating-' + comment.id">Note</label>
+                                    <select class="rs-input" [id]="'edit-comment-rating-' + comment.id" formControlName="rating">
+                                        <option [ngValue]="null">Sans note</option>
+                                        @for (rating of ratingOptions; track rating) {
+                                        <option [ngValue]="rating">{{ rating }} / 5</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="rs-field">
+                                <label [attr.for]="'edit-comment-text-' + comment.id">Votre commentaire</label>
+                                <textarea class="rs-input rs-textarea" [id]="'edit-comment-text-' + comment.id" formControlName="comment" rows="3" maxlength="1000"></textarea>
+                            </div>
+
+                            @if (editCommentForm.controls.comment.touched && editCommentForm.controls.comment.invalid) {
+                            <p class="rs-field-error">Le commentaire est requis.</p>
+                            }
+
+                            <div class="rs-comment-form-actions">
+                                <button type="submit" class="rs-comment-primary-action" [disabled]="isCommentSubmitting()">Enregistrer</button>
+                                <button type="button" class="rs-comment-secondary-action" (click)="setEditTarget(null)">Annuler</button>
+                            </div>
+                        </form>
+                        } @else {
+                        <p class="rs-comment-body">{{ comment.comment }}</p>
+                        }
+
+                        <div class="rs-comment-actions">
+                            @if (canReplyTo(comment)) {
+                            <button type="button" class="rs-comment-action" (click)="setReplyTarget(comment.id)">Répondre</button>
+                            }
+
+                            @if (canEditOwn(comment) && editCommentId() !== comment.id) {
+                            <button type="button" class="rs-comment-action" (click)="setEditTarget(comment)">Modifier</button>
+                            }
+
+                            @if (canDeleteOwn(comment)) {
+                            <button type="button" class="rs-comment-action rs-comment-action--danger" [disabled]="activeCommentAction() === 'delete-' + comment.id" (click)="deleteOwnComment(comment)">Supprimer</button>
+                            }
+
+                            @if (canModerate(comment)) {
+                            <button type="button" class="rs-comment-action" [disabled]="activeCommentAction() === 'moderate-' + comment.id" (click)="moderateComment(comment)">Modérer</button>
+                            }
+
+                            @if (isAdmin()) {
+                            <button type="button" class="rs-comment-action rs-comment-action--danger" [disabled]="activeCommentAction() === 'admin-delete-' + comment.id" (click)="deleteCommentAsAdmin(comment)">Supprimer définitivement</button>
+                            }
+                        </div>
+
+                        @if (replyCommentId() === comment.id) {
+                        <form class="rs-comment-form rs-reply-form" [formGroup]="replyForm" (ngSubmit)="submitReply(recipe, comment)" novalidate>
+                            <div class="rs-field">
+                                <label [attr.for]="'reply-comment-text-' + comment.id">Votre réponse</label>
+                                <textarea class="rs-input rs-textarea" [id]="'reply-comment-text-' + comment.id" formControlName="comment" rows="3" maxlength="1000"></textarea>
+                            </div>
+
+                            @if (replyForm.controls.comment.touched && replyForm.controls.comment.invalid) {
+                            <p class="rs-field-error">La réponse est requise.</p>
+                            }
+
+                            <div class="rs-comment-form-actions">
+                                <button type="submit" class="rs-comment-primary-action" [disabled]="isCommentSubmitting()">Publier</button>
+                                <button type="button" class="rs-comment-secondary-action" (click)="setReplyTarget(null)">Annuler</button>
+                            </div>
+                        </form>
+                        }
+
+                        @if (comment.children.length > 0) {
+                        <div class="rs-replies-list">
+                            @for (reply of comment.children; track reply.id) {
+                            <article class="rs-comment rs-comment--reply" [class.rs-comment--unavailable]="isCommentUnavailable(reply)">
+                                <header class="rs-comment-header">
+                                    <div>
+                                        @if (isAdmin()) {
+                                        <strong><a class="rs-btn rs-btn-outline" [routerLink]="['/admin/users', reply.author.id]">{{ reply.author.username }}</a></strong>
+                                        } @else {
+                                        <strong><a class="rs-btn rs-btn-outline" [routerLink]="['/users', reply.author.username]">{{ reply.author.username }}</a></strong>
+                                        }
+                                        <span>{{ reply.createdAt | date: 'dd/MM/yyyy' }}</span>
+                                    </div>
+                                </header>
+
+                                @if (reply.isDeleted) {
+                                <p class="rs-comment-body">Cette réponse a été supprimée.</p>
+                                } @else if (reply.isModerated) {
+                                <p class="rs-comment-body">Cette réponse a été modérée.</p>
+                                } @else if (editCommentId() === reply.id) {
+                                <form class="rs-comment-form rs-edit-form" [formGroup]="editCommentForm" (ngSubmit)="submitEdit(reply)" novalidate>
+                                    <div class="rs-field">
+                                        <label [attr.for]="'edit-reply-text-' + reply.id">Votre réponse</label>
+                                        <textarea class="rs-input rs-textarea" [id]="'edit-reply-text-' + reply.id" formControlName="comment" rows="3" maxlength="1000"></textarea>
+                                    </div>
+
+                                    @if (editCommentForm.controls.comment.touched && editCommentForm.controls.comment.invalid) {
+                                    <p class="rs-field-error">La réponse est requise.</p>
+                                    }
+
+                                    <div class="rs-comment-form-actions">
+                                        <button type="submit" class="rs-comment-primary-action" [disabled]="isCommentSubmitting()">Enregistrer</button>
+                                        <button type="button" class="rs-comment-secondary-action" (click)="setEditTarget(null)">Annuler</button>
+                                    </div>
+                                </form>
+                                } @else {
+                                <p class="rs-comment-body">{{ reply.comment }}</p>
+                                }
+
+                                <div class="rs-comment-actions">
+                                    @if (canEditOwn(reply) && editCommentId() !== reply.id) {
+                                    <button type="button" class="rs-comment-action" (click)="setEditTarget(reply)">Modifier</button>
+                                    }
+
+                                    @if (canDeleteOwn(reply)) {
+                                    <button type="button" class="rs-comment-action rs-comment-action--danger" [disabled]="activeCommentAction() === 'delete-' + reply.id" (click)="deleteOwnComment(reply)">Supprimer</button>
+                                    }
+
+                                    @if (canModerate(reply)) {
+                                    <button type="button" class="rs-comment-action" [disabled]="activeCommentAction() === 'moderate-' + reply.id" (click)="moderateComment(reply)">Modérer</button>
+                                    }
+
+                                    @if (isAdmin()) {
+                                    <button type="button" class="rs-comment-action rs-comment-action--danger" [disabled]="activeCommentAction() === 'admin-delete-' + reply.id" (click)="deleteCommentAsAdmin(reply)">Supprimer définitivement</button>
+                                    }
+                                </div>
+                            </article>
+                            }
+                        </div>
+                        }
+                    </article>
+                    }
+                </div>
+                }
+
+                @if (sessionUser()) {
+                <form class="rs-comment-form" [formGroup]="rootCommentForm" (ngSubmit)="submitRootComment(recipe)"
+                    novalidate>
+                    <div class="rs-comment-form-row">
+                        <div class="rs-field">
+                            <label for="root-comment-rating">Note</label>
+                            <select class="rs-input" id="root-comment-rating" formControlName="rating">
+                                <option [ngValue]="null">Sans note</option>
+                                @for (rating of ratingOptions; track rating) {
+                                <option [ngValue]="rating">{{ rating }} / 5</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="rs-field">
+                        <label for="root-comment-text">Votre commentaire</label>
+                        <textarea class="rs-input rs-textarea" id="root-comment-text" formControlName="comment" rows="4" maxlength="1000"></textarea>
+                    </div>
+
+                    @if (rootCommentForm.controls.comment.touched && rootCommentForm.controls.comment.invalid) {
+                    <p class="rs-field-error">Le commentaire est requis.</p>
+                    }
+
+                    <div class="rs-comment-form-actions">
+                        <button type="submit" class="rs-comment-primary-action" [disabled]="isCommentSubmitting()">Publier</button>
+                    </div>
+                </form>
+                } @else {
+                <p class="rs-login-hint">
+                    <a [routerLink]="['/sign-in']" [queryParams]="{ redirectTo: '/recipes/' + recipe.slug }">Connectez-vous</a>
+                    pour écrire un commentaire.
+                </p>
+                }
+
+                @if (commentSuccessMessage()) {
+                <p class="rs-comment-feedback rs-comment-feedback--success" aria-live="polite">{{ commentSuccessMessage() }}</p>
+                }
+
+                @if (commentErrorMessage()) {
+                <p class="rs-comment-feedback rs-comment-feedback--error" aria-live="polite">{{ commentErrorMessage() }}</p>
+                }
+            </section>
+        </div>
+    </article>
+    } @else {
+    <section class="rs-state-card rs-state-card--empty">
+        <h2>Recette introuvable.</h2>
+        <p>Cette recette n'est pas disponible.</p>
+    </section>
+    }
+</section>

@@ -1,0 +1,203 @@
+<section class="rs-admin-review">
+    <a class="rs-back-link" [routerLink]="['/admin/recipes']">← Retour aux recettes en attente</a>
+
+    @if (successMessage()) {
+    <section class="rs-state-card rs-state-card--success" aria-live="polite">
+        <p>{{ successMessage() }}</p>
+    </section>
+    }
+
+    @if (isLoading()) {
+    <section class="rs-state-card" aria-live="polite">
+        <p>Chargement de la recette...</p>
+    </section>
+    } @else if (notFound()) {
+    <section class="rs-state-card">
+        <h1>Recette introuvable</h1>
+        <p>Cette recette n'existe pas ou n'est plus disponible pour la modération.</p>
+    </section>
+    } @else if (errorMessage() && !recipe()) {
+    <section class="rs-state-card rs-state-card--error" aria-live="polite">
+        <h1>Impossible de charger la recette</h1>
+        <p>{{ errorMessage() }}</p>
+    </section>
+    } @else if (recipe(); as recipe) {
+    <header class="rs-review-header">
+        <div>
+            <h1>Review de recette</h1>
+            <p class="rs-review-recipe-title">{{ recipe.title }}</p>
+        </div>
+    </header>
+
+    <div class="rs-review-layout">
+        <main class="rs-recipe-content">
+            <section class="rs-card rs-submission-info" aria-labelledby="submissionInfoTitle">
+                <h2 id="submissionInfoTitle">Informations de soumission</h2>
+                <p class="rs-submission-summary">
+                    <span>{{ recipe.user }}</span>
+
+                    @if (recipe.category) {
+                    <span>{{ recipe.category }}</span>
+                    }
+
+                    @if (recipe.submittedAt) {
+                    <span>Soumise le {{ recipe.submittedAt | date: 'dd/MM/yyyy' }}</span>
+                    }
+                </p>
+            </section>
+
+            @if (recipe.coverImageUrl) {
+            <figure class="rs-cover">
+                <img [src]="recipe.coverImageUrl" [alt]="recipe.title">
+            </figure>
+            }
+
+            <section class="rs-card">
+                <h2>Description</h2>
+                <p class="rs-description">{{ recipe.description }}</p>
+            </section>
+
+            <section class="rs-card">
+                <h2>Informations</h2>
+                <dl class="rs-info-grid">
+                    <div>
+                        <dt>Préparation</dt>
+                        <dd>{{ recipe.prepTimeMinutes }} min</dd>
+                    </div>
+                    @if (recipe.cookTimeMinutes !== null) {
+                    <div>
+                        <dt>Cuisson</dt>
+                        <dd>{{ recipe.cookTimeMinutes }} min</dd>
+                    </div>
+                    }
+                    @if (recipe.restTimeMinutes !== null) {
+                    <div>
+                        <dt>Repos</dt>
+                        <dd>{{ recipe.restTimeMinutes }} min</dd>
+                    </div>
+                    }
+                    <div>
+                        <dt>Portions</dt>
+                        <dd>{{ recipe.servings }}</dd>
+                    </div>
+                    <div>
+                        <dt>Catégorie</dt>
+                        <dd>{{ recipe.category ?? 'Non renseignée' }}</dd>
+                    </div>
+                </dl>
+            </section>
+
+            <section class="rs-card">
+                <h2>Tags</h2>
+                @if (!recipe.tags || recipe.tags.length === 0) {
+                <p class="rs-muted">Aucun tag renseigné.</p>
+                } @else {
+                <ul class="rs-chip-list">
+                    @for (tag of recipe.tags; track tag.id) {
+                    <li>{{ tag.name }}</li>
+                    }
+                </ul>
+                }
+            </section>
+
+            <section class="rs-card">
+                <h2>Ingrédients</h2>
+                @if (recipe.ingredients.length === 0) {
+                <p class="rs-muted">Aucun ingrédient renseigné.</p>
+                } @else {
+                <ul class="rs-ingredient-list">
+                    @for (ingredient of recipe.ingredients; track $index) {
+                    <li>
+                        <span>{{ ingredient.quantity }} {{ ingredient.unit }}</span>
+                        <strong>{{ ingredient.name }}</strong>
+                        @if (ingredient.note) {
+                        <em>{{ ingredient.note }}</em>
+                        }
+                    </li>
+                    }
+                </ul>
+                }
+            </section>
+
+            <section class="rs-card">
+                <h2>Étapes</h2>
+                @if (recipe.steps.length === 0) {
+                <p class="rs-muted">Aucune étape renseignée.</p>
+                } @else {
+                <ol class="rs-step-list">
+                    @for (step of recipe.steps; track step.stepNumber) {
+                    <li>{{ step.description }}</li>
+                    }
+                </ol>
+                }
+            </section>
+
+            <section class="rs-card">
+                <h2>Ustensiles</h2>
+                @if (recipe.equipments.length === 0) {
+                <p class="rs-muted">Aucun ustensile renseigné.</p>
+                } @else {
+                <ul class="rs-chip-list">
+                    @for (equipment of recipe.equipments; track equipment.id) {
+                    <li>{{ equipment.name }}</li>
+                    }
+                </ul>
+                }
+            </section>
+        </main>
+
+        <aside class="rs-moderation-panel" aria-label="Panneau de modération">
+            <section class="rs-card rs-card--sticky">
+                <h2>Modération</h2>
+
+                <div class="rs-status-row">
+                    <span>Statut actuel</span>
+                    <strong>{{ getStatusLabel(recipe.status) }}</strong>
+                </div>
+
+                @if (isAlreadyProcessed()) {
+                <p class="rs-info-message">Cette recette a déjà été traitée.</p>
+                }
+
+                @if (errorMessage()) {
+                <p class="rs-field-error" role="alert">{{ errorMessage() }}</p>
+                }
+
+                @if (isPending()) {
+                <div class="rs-actions">
+                    <button class="rs-btn rs-btn-outline" type="button" (click)="approve()" [disabled]="isSubmitting()">
+                        {{ isSubmitting() ? 'Traitement...' : 'Approuver' }}
+                    </button>
+                </div>
+                }
+
+                @if (isPending()) {
+                <div class="rs-rejection-form">
+                    <label class="rs-label" for="rejectionReason">Raison du refus</label>
+                    <textarea class="rs-textarea" id="rejectionReason" rows="5" [ngModel]="rejectionReason()"
+                        (ngModelChange)="updateRejectionReason($event)"></textarea>
+                    <p class="rs-hint">10 caractères minimum.</p>
+
+                    <button class="rs-btn rs-btn-danger" type="button" (click)="reject()"
+                        [disabled]="isSubmitting() || !canConfirmRejection()">
+                        {{ isSubmitting() ? 'Traitement...' : 'Confirmer le refus' }}
+                    </button>
+                </div>
+                }
+                @if (canArchiving()) {
+                    <div class="rs-actions">
+                        <button class="rs-btn rs-btn-outline" type="button" (click)="archive()" [disabled]="isSubmitting()">
+                            {{ isSubmitting() ? 'Traitement...' : 'Archiver' }}
+                        </button>
+                    </div>
+                }
+                <div class="rs-actions">
+                    <button class="rs-btn rs-btn-outline" type="button" (click)="delete()" [disabled]="isSubmitting()">
+                        {{ isSubmitting() ? 'Traitement...' : 'Supprimer' }}
+                    </button>
+                </div>
+            </section>
+        </aside>
+    </div>
+    }
+</section>

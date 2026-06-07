@@ -1,0 +1,199 @@
+﻿<section class="rs-profile">
+    <header class="rs-page-header">
+        <div class="rs-profile-hero">
+            <div class="rs-profile-hero-copy">
+                <h1 class="rs-profile-title">Profil</h1>
+                <p class="rs-profile-lead">Gérez vos informations personnelles et la sécurité de votre compte depuis un seul espace.</p>
+                <p class="rs-profile-meta">Les champs marqués <span aria-hidden="true">*</span> sont obligatoires.</p>
+            </div>
+
+            <aside class="rs-profile-summary" aria-label="Résumé du compte">
+                <span class="rs-profile-summary-label">E-mail actuel</span>
+
+                @if (isLoadingProfile()) {
+                <strong class="rs-profile-summary-value">Chargement...</strong>
+                } @else {
+                <strong class="rs-profile-summary-value">{{ currentEmail || 'Aucune adresse disponible' }}</strong>
+                }
+            </aside>
+        </div>
+    </header>
+
+    <div class="rs-profile-inner">
+        <div class="rs-profile-column">
+            <section class="rs-profile-card" aria-label="Modification de l'adresse e-mail">
+                @if (loadError()) {
+                <p class="rs-field-error rs-field-error--block">{{ loadError() }}</p>
+                }
+
+                @if (isLoadingProfile()) {
+                <p class="rs-profile-loading">Chargement de vos informations...</p>
+                }
+
+                <form class="rs-form" [formGroup]="emailForm" (ngSubmit)="submitEmail()" novalidate>
+                    <h2 class="rs-profile-card-title">Modifier mon e-mail</h2>
+
+                    @if (emailSuccess()) {
+                    <p class="rs-field-success">{{ emailSuccess() }}</p>
+                    }
+
+                    @if (emailError()) {
+                    <p class="rs-field-error rs-field-error--block">{{ emailError() }}</p>
+                    }
+
+                    <div class="rs-field">
+                        <label class="rs-label" for="newEmail">Nouvel e-mail <span aria-hidden="true">*</span></label>
+
+                        <input class="rs-input" id="newEmail" type="email" formControlName="newEmail" placeholder="nom@email.fr" autocomplete="email" inputmode="email" />
+
+                        @if (hasEmailError('newEmail')) {
+                            @if (emailForm.controls.newEmail.errors?.['required']) {
+                            <p class="rs-field-error">Veuillez renseigner votre nouvel e-mail.</p>
+                            }
+                            @if (emailForm.controls.newEmail.errors?.['email']) {
+                            <p class="rs-field-error">Veuillez saisir une adresse e-mail valide.</p>
+                            }
+                        }
+                    </div>
+
+                    <div class="rs-field">
+                        <label class="rs-label" for="emailCurrentPassword">Mot de passe actuel <span aria-hidden="true">*</span></label>
+
+                        <input class="rs-input" id="emailCurrentPassword" type="password" formControlName="currentPassword" placeholder="Votre mot de passe actuel" autocomplete="current-password" />
+
+                        @if (hasEmailError('currentPassword') && emailForm.controls.currentPassword.errors?.['required']) {
+                        <p class="rs-field-error">Veuillez renseigner votre mot de passe actuel.</p>
+                        }
+                    </div>
+
+                    <div class="rs-actions">
+                        <button class="rs-btn rs-btn-primary" type="submit" [disabled]="isSubmittingEmail()">
+                            @if (isSubmittingEmail()) {
+                            Mise à jour...
+                            } @else {
+                            Mettre à jour mon e-mail
+                            }
+                        </button>
+                    </div>
+                </form>
+            </section>
+
+            <section class="rs-profile-card" aria-label="Modification du nom">
+                <form class="rs-form" [formGroup]="usernameForm" (ngSubmit)="submitUsername()" novalidate>
+                    <h2 class="rs-profile-card-title">Modifier mon nom</h2>
+
+                    @if (usernameSuccess()) {
+                    <p class="rs-field-success">{{ usernameSuccess() }}</p>
+                    }
+
+                    @if (usernameError()) {
+                    <p class="rs-field-error rs-field-error--block">{{ usernameError() }}</p>
+                    }
+
+                    <div class="rs-field">
+                        <label class="rs-label" for="newUsername">Nouveau nom <span aria-hidden="true">*</span></label>
+
+                        <input class="rs-input" id="newUsername" type="text" formControlName="newUsername" placeholder="Votre nom" autocomplete="name" inputmode="name" required />
+
+                        @if (hasUsernameError('newUsername')) {
+                            @if (usernameForm.controls.newUsername.errors?.['required']) {
+                            <p class="rs-field-error">Veuillez renseigner votre nouveau nom.</p>
+                            }
+                        }
+                    </div>
+
+                    <div class="rs-field">
+                        <label class="rs-label" for="usernameCurrentPassword">Mot de passe actuel <span aria-hidden="true">*</span></label>
+
+                        <input class="rs-input" id="usernameCurrentPassword" type="password" formControlName="currentPassword" placeholder="Votre mot de passe actuel" autocomplete="current-password" />
+
+                        @if (hasUsernameError('currentPassword') && usernameForm.controls.currentPassword.errors?.['required']) {
+                        <p class="rs-field-error">Veuillez renseigner votre mot de passe actuel.</p>
+                        }
+                    </div>
+
+                    <div class="rs-actions">
+                        <button class="rs-btn rs-btn-primary" type="submit" [disabled]="isSubmittingUsername()">
+                            @if (isSubmittingUsername()) {
+                            Mise à jour...
+                            } @else {
+                            Mettre à jour mon nom
+                            }
+                        </button>
+                    </div>
+                </form>
+            </section>
+        </div>
+
+        <section class="rs-profile-card" aria-label="Modification du mot de passe">
+            <form class="rs-form" [formGroup]="passwordForm" (ngSubmit)="submitPassword()" novalidate>
+                <h2 class="rs-profile-card-title">Modifier mon mot de passe</h2>
+
+                @if (passwordSuccess()) {
+                <p class="rs-field-success">{{ passwordSuccess() }}</p>
+                }
+
+                @if (passwordError()) {
+                <p class="rs-field-error rs-field-error--block">{{ passwordError() }}</p>
+                }
+
+                <div class="rs-field">
+                    <label class="rs-label" for="currentPassword">
+                        Mot de passe actuel <span aria-hidden="true">*</span>
+                    </label>
+
+                    <input class="rs-input" id="currentPassword" type="password" formControlName="currentPassword"
+                        placeholder="Votre mot de passe actuel" autocomplete="current-password" />
+
+                    @if (hasPasswordError('currentPassword')) {
+                        @if (passwordForm.controls.currentPassword.errors?.['required']) {
+                        <p class="rs-field-error">
+                            Veuillez renseigner votre mot de passe actuel.
+                        </p>
+                        }
+                    }
+                </div>
+
+                <div class="rs-field">
+                    <label class="rs-label" for="newPassword">Nouveau mot de passe <span aria-hidden="true">*</span></label>
+
+                    <input class="rs-input" id="newPassword" type="password" formControlName="newPassword" placeholder="Votre nouveau mot de passe" autocomplete="new-password" />
+
+                    @if (hasPasswordError('newPassword')) {
+                        @if (passwordForm.controls.newPassword.errors?.['required']) {
+                        <p class="rs-field-error">Veuillez renseigner un nouveau mot de passe.</p>
+                        }
+                        @if (passwordForm.controls.newPassword.errors?.['passwordStrength']) {
+                        <p class="rs-field-error">Le mot de passe doit être plus robuste.</p>
+                        }
+                    }
+                </div>
+
+                <div class="rs-field">
+                    <label class="rs-label" for="confirmPassword">Confirmer le mot de passe <span aria-hidden="true">*</span></label>
+
+                    <input class="rs-input" id="confirmPassword" type="password" formControlName="confirmPassword" placeholder="Confirmez votre nouveau mot de passe" autocomplete="new-password" />
+
+                    @if (hasPasswordError('confirmPassword') && passwordForm.controls.confirmPassword.errors?.['required']) {
+                    <p class="rs-field-error">Veuillez confirmer votre nouveau mot de passe.</p>
+                    }
+
+                    @if (passwordForm.errors?.['passwordMismatch'] && (passwordForm.controls.confirmPassword.touched || passwordForm.controls.confirmPassword.dirty)) {
+                    <p class="rs-field-error">Les mots de passe ne correspondent pas.</p>
+                    }
+                </div>
+
+                <div class="rs-actions">
+                    <button class="rs-btn rs-btn-primary" type="submit" [disabled]="isSubmittingPassword()">
+                        @if (isSubmittingPassword()) {
+                        Mise à jour...
+                        } @else {
+                        Mettre à jour mon mot de passe
+                        }
+                    </button>
+                </div>
+            </form>
+        </section>
+
+    </div>
+</section>

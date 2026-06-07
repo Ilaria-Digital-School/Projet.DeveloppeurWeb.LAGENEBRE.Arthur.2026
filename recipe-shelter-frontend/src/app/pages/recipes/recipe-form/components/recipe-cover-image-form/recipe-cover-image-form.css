@@ -1,0 +1,91 @@
+.rs-section,
+.rs-section-heading {
+  display: grid;
+}
+
+.rs-section {
+  gap: 16px;
+  padding: clamp(18px, 3vw, 24px);
+  border: 1px solid rgb(var(--rs-dark-rgb) / 0.10);
+  border-radius: 8px;
+  background: white;
+  box-shadow: 0 10px 24px rgb(0 0 0 / 0.04);
+}
+
+.rs-section-heading {
+  gap: 6px;
+}
+
+.rs-section h2,
+.rs-section p {
+  margin: 0;
+}
+
+.rs-section h2 {
+  color: rgb(var(--rs-dark-rgb) / 0.88);
+  font-size: 1.18rem;
+  line-height: 1.25;
+}
+
+.rs-section p {
+  color: rgb(var(--rs-dark-rgb) / 0.64);
+  line-height: 1.55;
+}
+
+.rs-field {
+  display: grid;
+  gap: 8px;
+}
+
+.rs-label {
+  color: rgb(var(--rs-dark-rgb) / 0.72);
+  font-size: 0.92rem;
+  font-weight: 650;
+}
+
+.rs-input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px 14px;
+  border: 1px solid rgb(var(--rs-dark-rgb) / 0.28);
+  border-radius: 14px;
+  background: white;
+  color: rgb(var(--rs-dark-rgb) / 0.92);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+.rs-input:hover {
+  border-color: rgb(var(--rs-dark-rgb) / 0.42);
+}
+
+.rs-input:focus {
+  outline: 3px solid var(--rs-focus-ring);
+  outline-offset: 2px;
+  border-color: var(--rs-accent);
+  box-shadow: 0 0 0 3px rgb(var(--rs-accent-rgb) / 0.25);
+}
+
+.rs-cover-preview {
+  margin: 0;
+  overflow: hidden;
+  border: 1px solid rgb(var(--rs-dark-rgb) / 0.10);
+  border-radius: 8px;
+  background: rgb(var(--rs-dark-rgb) / 0.04);
+}
+
+.rs-cover-preview img {
+  display: block;
+  width: 100%;
+  max-height: 320px;
+  object-fit: cover;
+}
+
+@media (max-width: 575.98px) {
+  .rs-section {
+    padding: 16px;
+  }
+
+  .rs-input {
+    border-radius: 12px;
+  }
+}

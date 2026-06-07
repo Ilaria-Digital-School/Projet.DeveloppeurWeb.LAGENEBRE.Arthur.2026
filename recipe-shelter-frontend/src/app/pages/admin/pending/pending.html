@@ -1,0 +1,61 @@
+<section class="rs-admin-pending">
+    <a class="rs-back-link" routerLink="/admin/dashboard">← Retour au tableau de bord</a>
+
+    @if (successMessage()) {
+    <section class="rs-state-card rs-state-card--success" aria-live="polite">
+        <p>{{ successMessage() }}</p>
+    </section>
+    }
+    
+    <header class="rs-page-header">
+        <h1 class="rs-admin-pending-title">Recettes en attente</h1>
+        <p>Consultez les recettes soumises avant validation.</p>
+    </header>
+
+    @if (isLoading()) {
+    <section class="rs-state-card" aria-live="polite">
+        <p>Chargement des recettes...</p>
+    </section>
+    } @else if (errorMessage()) {
+    <section class="rs-state-card rs-state-card--error" aria-live="polite">
+        <p>{{ errorMessage() }}</p>
+    </section>
+    } @else if (recipes().length === 0) {
+    <section class="rs-state-card">
+        <h2>Aucune recette en attente</h2>
+        <p>Les nouvelles soumissions apparaîtront ici dès qu'elles seront prêtes à être relues.</p>
+    </section>
+    } @else {
+    <div class="rs-pending-grid" aria-label="Liste des recettes en attente">
+        @for (recipe of recipes(); track recipe.id) {
+        <article class="rs-pending-card">
+            <div class="rs-pending-card-main">
+                <div class="rs-pending-card-heading">
+                    <h2>{{ recipe.title }}</h2>
+                </div>
+
+                @if (recipe.description) {
+                <p class="rs-pending-description">{{ recipe.description }}</p>
+                }
+
+                <div class="rs-pending-meta" aria-label="Informations de la recette">
+                    <span class="rs-pending-meta-item">{{ recipe.user }}</span>
+
+                    @if (recipe.category) {
+                    <span class="rs-pending-meta-item">{{ recipe.category }}</span>
+                    }
+
+                    @if (recipe.submittedAt) {
+                    <span class="rs-pending-meta-item">{{ recipe.submittedAt | date: 'dd/MM/yyyy' }}</span>
+                    }
+                </div>
+            </div>
+
+            <div class="rs-pending-actions">
+                <a class="rs-btn rs-btn-outline" [routerLink]="['/admin/recipes', recipe.id]">Review</a>
+            </div>
+        </article>
+        }
+    </div>
+    }
+</section>

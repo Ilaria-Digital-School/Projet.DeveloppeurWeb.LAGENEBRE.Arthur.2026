@@ -1,0 +1,19 @@
+# ============================================
+# Favorites
+# ============================================
+
+@baseUrl = http://localhost:3000/api/v1
+@sessionCookie = PASTE_RS_SESSION_COOKIE_HERE
+@recipeId = 1
+
+### Add favorite
+POST {{baseUrl}}/favorites/{{recipeId}}
+Cookie: rs_session={{sessionCookie}}
+
+### My favorite recipes
+GET {{baseUrl}}/favorites/me?page=1&limit=12
+Cookie: rs_session={{sessionCookie}}
+
+### Remove favorite
+DELETE {{baseUrl}}/favorites/{{recipeId}}
+Cookie: rs_session={{sessionCookie}}

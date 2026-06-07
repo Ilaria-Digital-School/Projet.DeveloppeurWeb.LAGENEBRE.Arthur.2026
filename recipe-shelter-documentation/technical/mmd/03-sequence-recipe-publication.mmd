@@ -1,0 +1,59 @@
+sequenceDiagram
+  autonumber
+  actor U as Utilisateur (connecté)
+  actor A as Administrateur
+  participant F as Angular (RecipeFormComponent)
+  participant RS as RecipesService (Angular)
+  participant C as RecipesController
+  participant SV as RecipeService (backend)
+  participant SL as RecipeSlugService
+  participant R as RecipeRepository
+  participant DB as MySQL
+
+  Note over U, DB: Phase 1 — Création du brouillon
+  U->>F: Remplit le formulaire recette
+  F->>RS: createRecipe(formData)
+  RS->>C: POST /api/v1/me/recipes
+  C->>C: parseCreateRecipeBody(req.body)
+  C->>SV: create(userId, input)
+  SV->>SL: generateDraftSlug(title)
+  SL-->>SV: slug temporaire
+  SV->>R: create(recipeInput)
+  R->>DB: INSERT INTO recipes (status = draft)
+  DB-->>R: recipeId
+  R-->>SV: Recipe
+  SV-->>C: Recipe (status draft)
+  C-->>RS: 201 { recipe }
+  RS-->>F: Confirmation brouillon
+  F-->>U: "Brouillon enregistré"
+
+  Note over U, DB: Phase 2 — Soumission à la modération
+  U->>F: Clique sur "Soumettre à la modération"
+  F->>RS: submitRecipe(recipeId)
+  RS->>C: POST /api/v1/me/recipes/:id/submit
+  C->>SV: submit(recipeId, auth)
+  SV->>SV: requireEditableRecipe(recipeId, auth)
+  SV->>SL: createPublicSlug(title)
+  SL->>R: existsBySlug(slug)
+  R->>DB: SELECT 1 WHERE slug = ?
+  DB-->>R: exists
+  SL-->>SV: slug unique
+  SV->>R: submit(recipeId, publicSlug)
+  R->>DB: UPDATE status = pending
+  DB-->>R: OK
+  R-->>SV: Recipe (status pending)
+  SV-->>C: Recipe
+  C-->>RS: 200 { recipe }
+  F-->>U: "En attente de validation"
+
+  Note over A, DB: Phase 3 — Modération par l'admin
+  A->>+C: GET /api/v1/admin/recipes
+  C-->>-A: recettes en attente
+  A->>+C: POST /api/v1/admin/recipes/:id/approve
+  C->>SV: approve(recipeId, adminUserId)
+  SV->>R: approve(recipeId, adminUserId)
+  R->>DB: UPDATE status = published, publishedAt = NOW()
+  DB-->>R: OK
+  R-->>SV: Recipe (status published)
+  SV-->>C: Recipe
+  C-->>-A: 200 { recipe }

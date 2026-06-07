@@ -1,0 +1,63 @@
+<div class="rs-admin-comments-grid" aria-label="Liste des commentaires admin">
+    @for (comment of comments(); track comment.id) {
+    <article class="rs-comment-card">
+        <div class="rs-comment-main">
+            <div class="rs-comment-heading">
+                <div>
+                    <h2>{{ comment.username }}</h2>
+                    <a [routerLink]="['/recipes', comment.recipeSlug]">{{ comment.recipeTitle }}</a>
+                </div>
+
+                @if (comment.rating !== null) {
+                <span class="rs-rating">{{ comment.rating }}/5</span>
+                }
+            </div>
+
+            <p class="rs-comment-content">{{ comment.comment }}</p>
+
+            <dl class="rs-comment-meta">
+                <div>
+                    <dt>Date de création</dt>
+                    <dd>{{ comment.createdAt | date: 'dd/MM/yyyy HH:mm' }}</dd>
+                </div>
+
+                @if (showModerationDetails()) {
+                <div>
+                    <dt>Date de modération</dt>
+                    <dd>{{ comment.moderatedAt | date: 'dd/MM/yyyy HH:mm' }}</dd>
+                </div>
+
+                @if (comment.moderatedByUsername) {
+                <div>
+                    <dt>Modéré par</dt>
+                    <dd>{{ comment.moderatedByUsername }}</dd>
+                </div>
+                }
+                } @else {
+                <div>
+                    <dt>Date de suppression</dt>
+                    <dd>{{ comment.deletedAt | date: 'dd/MM/yyyy HH:mm' }}</dd>
+                </div>
+
+                @if (comment.deletedByUsername) {
+                <div>
+                    <dt>Supprimé par</dt>
+                    <dd>{{ comment.deletedByUsername }}</dd>
+                </div>
+                }
+                }
+            </dl>
+        </div>
+
+        <div class="rs-comment-actions">
+            <button class="rs-btn rs-btn-outline" type="button" (click)="emitAction(primaryAction(), comment)" [disabled]="actionInProgressId() === comment.id">
+                {{ actionInProgressId() === comment.id ? 'Traitement...' : primaryActionLabel(primaryAction()) }}
+            </button>
+
+            <button class="rs-btn rs-btn-danger-outline" type="button" (click)="emitAction('delete', comment)" [disabled]="actionInProgressId() === comment.id">
+                Supprimer définitivement
+            </button>
+        </div>
+    </article>
+    }
+</div>

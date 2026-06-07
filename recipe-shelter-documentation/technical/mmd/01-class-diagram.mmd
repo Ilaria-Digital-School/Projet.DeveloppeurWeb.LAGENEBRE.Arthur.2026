@@ -1,0 +1,125 @@
+classDiagram
+  direction TB
+
+  class User {
+    +int id
+    +string mail
+    +string username
+    +int roleId
+    +UserStatus status
+    +Date emailValidatedAt
+    +int bannedByUserId
+    +string bannedReason
+    +Date bannedAt
+    +Date createdAt
+    +Date updatedAt
+  }
+
+  class Recipe {
+    +int id
+    +int userId
+    +int categoryId
+    +string title
+    +string slug
+    +string description
+    +string coverImageUrl
+    +int prepTimeMinutes
+    +int cookTimeMinutes
+    +int restTimeMinutes
+    +int servings
+    +RecipeStatus status
+    +Date createdAt
+    +Date submittedAt
+    +Date moderatedAt
+    +Date publishedAt
+    +Date archivedAt
+    +string rejectionReason
+    +Date updatedAt
+  }
+
+  class Comment {
+    +int id
+    +int recipeId
+    +int userId
+    +int parentCommentId
+    +int rating
+    +string comment
+    +Date moderatedAt
+    +int moderatedByUserId
+    +Date deletedAt
+    +int deletedByUserId
+    +Date createdAt
+    +Date updatedAt
+  }
+
+  class Favorite {
+    +int userId
+    +int recipeId
+    +Date createdAt
+  }
+
+  class Category {
+    +int id
+    +string name
+    +string slug
+    +string iconName
+  }
+
+  class Tag {
+    +int id
+    +string name
+    +string slug
+  }
+
+  class Ingredient {
+    +int id
+    +string name
+    +string slug
+  }
+
+  class Equipment {
+    +int id
+    +string name
+    +string slug
+  }
+
+  class RecipeIngredient {
+    +int ingredientId
+    +number quantity
+    +string unit
+    +string note
+    +int sortOrder
+  }
+
+  class RecipeStep {
+    +int stepNumber
+    +string description
+  }
+
+  class RecipeEquipment {
+    +int equipmentId
+  }
+
+  class RecipeTag {
+    +int recipeId
+    +int tagId
+  }
+
+  User "1" --> "0..*" Recipe : crée
+  User "1" --> "0..*" Comment : rédige
+  User "0..*" --> "0..*" Recipe : met en favori
+  Favorite ..> User : userId
+  Favorite ..> Recipe : recipeId
+
+  Recipe "0..*" --> "0..1" Category : appartient à
+  Recipe "1" --> "0..*" RecipeIngredient : contient
+  Recipe "1" --> "0..*" RecipeStep : contient
+  Recipe "1" --> "0..*" RecipeEquipment : nécessite
+  Recipe "1" --> "0..*" RecipeTag : est taguée
+
+  RecipeIngredient "0..*" --> "1" Ingredient : référence
+  RecipeEquipment "0..*" --> "1" Equipment : référence
+  RecipeTag "0..*" --> "1" Tag : référence
+
+  Comment "0..*" --> "1" Recipe : concerne
+  Comment "0..*" --> "0..1" Comment : réponse à (1 niveau max)

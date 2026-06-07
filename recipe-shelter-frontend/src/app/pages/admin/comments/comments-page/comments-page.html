@@ -1,0 +1,27 @@
+<section class="rs-admin-comments">
+    <a class="rs-back-link" routerLink="/admin/dashboard">← Retour au tableau de bord</a>
+
+    <header class="rs-page-header">
+        <h1>{{ config().title }}</h1>
+    </header>
+
+    @if (isLoading()) {
+    <section class="rs-state-card" aria-live="polite">
+        <p>{{ config().loadingLabel }}</p>
+    </section>
+    } @else if (errorMessage() && comments().length === 0) {
+    <section class="rs-state-card rs-state-card--error" aria-live="polite">
+        <p>{{ errorMessage() }}</p>
+    </section>
+    } @else if (comments().length === 0) {
+    <section class="rs-state-card">
+        <p>{{ config().emptyLabel }}</p>
+    </section>
+    } @else {
+    @if (errorMessage()) {
+    <p class="rs-error-message" role="alert">{{ errorMessage() }}</p>
+    }
+
+    <rs-admin-comments-list [comments]="comments()" [primaryAction]="config().primaryAction" [showModerationDetails]="config().showModerationDetails" [actionInProgressId]="actionInProgressId()" (action)="handleAction($event)" />
+    }
+</section>

@@ -1,0 +1,70 @@
+<section class="rs-search-page">
+    <header class="rs-search-header">
+        <div>
+            <h1>Recherche</h1>
+            <p>Trouvez une recette publiée par mot-clé, catégorie ou ingrédient.</p>
+        </div>
+    </header>
+
+    <form class="rs-search-form" [formGroup]="form" (ngSubmit)="onSubmit()">
+        <div class="rs-field">
+            <label class="rs-label" for="search-q">Recherche texte</label>
+            <input class="rs-input" id="search-q" type="search" formControlName="q" placeholder="Nom, description..." autocomplete="off">
+        </div>
+
+        <div class="rs-field">
+            <label class="rs-label" for="search-category">Catégorie</label>
+            <select class="rs-input" id="search-category" formControlName="categoryId">
+                <option [ngValue]="null">Toutes les catégories</option>
+                @for (category of categories(); track category.id) {
+                <option [ngValue]="category.id">{{ category.name }}</option>
+                }
+            </select>
+            @if (categoriesError()) {
+            <p class="rs-field-hint rs-field-hint--error" aria-live="polite">{{ categoriesError() }}</p>
+            }
+        </div>
+
+        <div class="rs-field">
+            <label class="rs-label" for="search-tags">Tags</label>
+            <select class="rs-input" id="search-tags" formControlName="tagIds" multiple>
+                @for (tag of tags(); track tag.id) {
+                <option [ngValue]="tag.id">{{ tag.name }}</option>
+                }
+            </select>
+            @if (tagsError()) {
+            <p class="rs-field-hint rs-field-hint--error" aria-live="polite">{{ tagsError() }}</p>
+            }
+        </div>
+
+        <div class="rs-field">
+            <label class="rs-label" for="search-ingredients">Ingrédients</label>
+            <select class="rs-input" id="search-ingredients" formControlName="ingredientIds" multiple>
+                @for (ingredient of ingredients(); track ingredient.id) {
+                <option [ngValue]="ingredient.id">{{ ingredient.name }}</option>
+                }
+            </select>
+            @if (ingredientsError()) {
+            <p class="rs-field-hint rs-field-hint--error" aria-live="polite">{{ ingredientsError() }}</p>
+            }
+        </div>
+
+        <div class="rs-field">
+            <label class="rs-label" for="search-max-total-time">Temps total max</label>
+            <input class="rs-input" id="search-max-total-time" type="number" formControlName="maxTotalTimeMinutes" placeholder="minute(s)" min="1" step="1">
+        </div>
+
+        <div class="rs-search-actions">
+            <button class="rs-btn rs-btn-primary" type="submit" [disabled]="isSearchEmpty">Rechercher</button>
+            <button class="rs-btn rs-btn-outline" type="button" [disabled]="isSearchEmpty" (click)="onReset()">Réinitialiser</button>
+        </div>
+    </form>
+
+    @if (hasSubmittedSearch()) {
+    <rs-recipe-list-shell title="" subtitle="" emptyTitle="Aucune recette trouvée." emptyDescription="Essayez de modifier votre recherche." [loading]="isLoading()" [error]="errorMessage()" [isEmpty]="recipes().length === 0" [pagination]="pagination()" (pageChange)="onPageChange($event)">
+        @for (recipe of recipes(); track recipe.id) {
+        <rs-recipe-card [recipe]="recipe" [favoriteUpdating]="isFavoriteUpdating(recipe.id)" (favoriteToggled)="onFavoriteToggle($event)" />
+        }
+    </rs-recipe-list-shell>
+    }
+</section>

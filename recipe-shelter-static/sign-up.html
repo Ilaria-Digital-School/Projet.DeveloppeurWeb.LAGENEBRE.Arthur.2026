@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Créez votre compte Recipe Shelter pour partager et sauvegarder vos recettes préférées." />
+  <title>Inscription — Recipe Shelter</title>
+  <link rel="stylesheet" href="css/main.css" />
+  <style>
+    /* Indicateur de force du mot de passe */
+    .rs-pwd-strength {
+      display: grid;
+      gap: .3rem;
+      margin-top: .3rem;
+    }
+
+    .rs-pwd-strength-track {
+      height: 4px;
+      border-radius: 2px;
+      background: #e5e7eb;
+      overflow: hidden;
+    }
+
+    .rs-pwd-strength-bar {
+      height: 100%;
+      width: 0;
+      border-radius: 2px;
+      transition: width .3s, background .3s;
+    }
+
+    .rs-pwd-strength-label {
+      font-size: .78rem;
+      color: rgba(26, 26, 26, .55);
+      min-height: 1.2em;
+    }
+
+    /* Bandeau succès */
+    .rs-success-banner {
+      padding: 2rem;
+      border: 1px solid rgba(6, 118, 71, .3);
+      border-radius: 12px;
+      background: rgba(6, 118, 71, .06);
+      text-align: center;
+      display: grid;
+      gap: .8rem;
+    }
+
+    .rs-success-banner .icon {
+      font-size: 3rem;
+    }
+
+    .rs-success-banner h2 {
+      color: #067647;
+      font-size: 1.3rem;
+    }
+
+    .rs-success-banner p {
+      color: rgba(26, 26, 26, .65);
+      margin: 0;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ══════════════ EN-TÊTE ══════════════ -->
+  <header class="rs-header" aria-label="En-tête">
+    <div class="rs-shell">
+      <div class="rs-header-inner">
+
+        <a href="index.html" class="rs-brand" aria-label="Accueil Recipe Shelter">Recipe Shelter</a>
+
+        <form id="header-search-form" class="rs-header-search" role="search">
+          <label class="visually-hidden" for="header-search-q">Rechercher une recette</label>
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+            <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398l3.85 3.85a1 1 0 0 0 1.415-1.415zm-5.242 1.15a5.5 5.5 0 1 1 0-11 5.5 5.5 0 0 1 0 11" />
+          </svg>
+          <input id="header-search-q" name="q" type="search" placeholder="Rechercher une recette…" autocomplete="off" aria-label="Rechercher une recette" />
+          <button type="submit" aria-label="Lancer la recherche">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+              <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8" />
+            </svg>
+          </button>
+        </form>
+
+        <button id="hamburger" class="rs-hamburger" type="button" aria-controls="main-nav" aria-expanded="false" aria-label="Afficher le menu principal">
+          <span></span><span></span><span></span>
+        </button>
+
+        <nav id="main-nav" class="rs-nav" aria-label="Navigation principale">
+          <a href="index.html">Accueil</a>
+          <a href="recipes.html">Recettes</a>
+          <a href="sign-in.html">Connexion</a>
+          <a href="sign-up.html" aria-current="page">Inscription</a>
+        </nav>
+
+      </div>
+    </div>
+  </header>
+
+  <!-- ══════════════ CONTENU ══════════════ -->
+  <main class="rs-main">
+    <div class="rs-shell">
+      <div class="rs-auth-wrap">
+        <div class="rs-auth-card">
+
+          <h1>Créer un compte</h1>
+
+          <!-- Bandeau succès (caché par défaut) -->
+          <div id="success-banner" class="rs-success-banner" hidden tabindex="-1" aria-live="polite" role="status">
+            <div class="icon" aria-hidden="true">✅</div>
+            <h2>Compte créé avec succès !</h2>
+            <p>Un email de validation vous a été envoyé. Vérifiez votre boîte de réception pour activer votre compte.</p>
+            <a href="index.html" class="rs-btn rs-btn-primary" style="justify-self:center;">Retour à l'accueil</a>
+          </div>
+
+          <!-- Formulaire d'inscription -->
+          <form id="signup-form" class="rs-form" novalidate aria-label="Formulaire d'inscription">
+
+            <!-- Nom d'utilisateur -->
+            <div class="rs-field">
+              <label class="rs-label" for="username">Nom d'utilisateur</label>
+              <input class="rs-input" id="username" name="username" type="text" autocomplete="username" placeholder="ex : chef_martin" required aria-required="true" aria-describedby="username-error username-hint" />
+              <p id="username-hint" class="rs-field-hint">3 à 64 caractères — lettres, chiffres, _ - .</p>
+              <p id="username-error" class="rs-field-error" role="alert"></p>
+            </div>
+
+            <!-- Email -->
+            <div class="rs-field">
+              <label class="rs-label" for="email">Adresse email</label>
+              <input class="rs-input" id="email" name="email" type="email" autocomplete="email" placeholder="vous@exemple.fr" required aria-required="true" aria-describedby="email-error" />
+              <p id="email-error" class="rs-field-error" role="alert"></p>
+            </div>
+
+            <!-- Mot de passe -->
+            <div class="rs-field">
+              <label class="rs-label" for="password">Mot de passe</label>
+              <input class="rs-input" id="password" name="password" type="password" autocomplete="new-password" placeholder="Minimum 8 caractères" required aria-required="true" aria-describedby="password-error pwd-strength-label" />
+              <!-- Indicateur de force -->
+              <div class="rs-pwd-strength" aria-hidden="true">
+                <div class="rs-pwd-strength-track">
+                  <div id="pwd-strength-bar" class="rs-pwd-strength-bar"></div>
+                </div>
+                <span id="pwd-strength-text" class="rs-pwd-strength-label"></span>
+              </div>
+              <p id="password-error" class="rs-field-error" role="alert"></p>
+            </div>
+
+            <!-- Confirmation -->
+            <div class="rs-field">
+              <label class="rs-label" for="password-confirm">Confirmer le mot de passe</label>
+              <input class="rs-input" id="password-confirm" name="password-confirm" type="password" autocomplete="new-password" placeholder="Retapez votre mot de passe" required aria-required="true" aria-describedby="password-confirm-error" />
+              <p id="password-confirm-error" class="rs-field-error" role="alert"></p>
+            </div>
+
+            <!-- CGU -->
+            <div class="rs-field" style="flex-direction:row;display:flex;align-items:flex-start;gap:.6rem;">
+              <input type="checkbox" id="accept-cgu" name="cgu" required aria-required="true" style="margin-top:.2rem;flex-shrink:0;width:16px;height:16px;cursor:pointer;" />
+              <label for="accept-cgu" style="font-size:.88rem;color:rgba(26,26,26,.7);cursor:pointer;">J'accepte les <a href="#" style="color:var(--rs-primary-dark);font-weight:700;">conditions générales d'utilisation</a> et la <a href="#" style="color:var(--rs-primary-dark);font-weight:700;">politique de confidentialité</a>.</label>
+            </div>
+
+            <button type="submit" id="submit-btn" class="rs-btn rs-btn-primary" style="margin-top:.4rem;">Créer mon compte</button>
+
+          </form>
+
+          <p class="rs-auth-footer-note">Déjà un compte ? <a href="#">Se connecter</a></p>
+
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="rs-footer">
+    <div class="rs-shell">
+      <div class="rs-footer-inner">
+        <span>© 2025 Recipe Shelter</span>
+        <nav class="rs-footer-links" aria-label="Liens du pied de page">
+          <a href="#">Mentions légales</a>
+          <a href="#">Politique de confidentialité</a>
+          <a href="#">CGU</a>
+          <a href="#">Contact</a>
+        </nav>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script src="js/validation.js"></script>
+</body>
+
+</html>

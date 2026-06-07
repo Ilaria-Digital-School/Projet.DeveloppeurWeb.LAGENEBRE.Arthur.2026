@@ -1,0 +1,62 @@
+<header class="rs-header border-bottom sticky-top" aria-label="En tête">
+    <nav class="navbar navbar-expand-lg">
+        <div class="container rs-shell">
+            <a routerLink="/" class="rs-brand" aria-label="Accueil Recipe Shelter" (click)="closeMenu()">Recipe Shelter</a>
+
+            <form class="rs-header-search" role="search" (submit)="search(searchInput.value); $event.preventDefault()">
+                <label class="visually-hidden" for="header-search-q">Rechercher une recette</label>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+                    <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398l3.85 3.85a1 1 0 0 0 1.415-1.415zm-5.242 1.15a5.5 5.5 0 1 1 0-11 5.5 5.5 0 0 1 0 11"/>
+                </svg>
+                <input #searchInput class="rs-header-search-input" id="header-search-q" name="q" type="search" placeholder="Rechercher une recette..." autocomplete="off">
+                <button class="rs-header-search-submit" type="submit" aria-label="Lancer la recherche">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+                        <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8"/>
+                    </svg>
+                </button>
+            </form>
+
+            <div class="rs-navbar-actions">
+                <button type="button" class="navbar-toggler" [class.collapsed]="!isMenuOpen()" [attr.aria-expanded]="isMenuOpen()" aria-controls="main-navbar" [attr.aria-label]="isMenuOpen() ? 'Fermer le menu principal' : 'Afficher le menu principal'" (click)="toggleMenu()">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div id="user-navbar" class="d-flex align-items-center gap-2">
+                    @if (session.isAuthenticated()) {
+                    <div id="user-dropdown" class="dropdown">
+                        <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle rs-user-menu-toggle" [class.show]="isUserMenuOpen()" [attr.aria-expanded]="isUserMenuOpen()" aria-controls="user-menu" (click)="toggleUserMenu($event)">{{ session.user()?.username }}</button>
+
+                        <ul id="user-menu" class="dropdown-menu dropdown-menu-end" [class.show]="isUserMenuOpen()">
+                            @if (session.isAdmin()) {
+                            <li><a class="dropdown-item" routerLink="/admin/dashboard" (click)="closeMenu()">Panneau d'administration</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            }
+                            <li><a class="dropdown-item" routerLink="/profile" (click)="closeMenu()">Profil</a></li>
+                            <li><a class="dropdown-item" routerLink="/me/recipes/list" (click)="closeMenu()">Mes recettes</a></li>
+                            <li><a class="dropdown-item" routerLink="/me/favorites" (click)="closeMenu()">Mes favoris</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><button class="dropdown-item" (click)="logout()">Déconnexion</button></li>
+                        </ul>
+                    </div>
+                    } @else {
+                    <a routerLink="/sign-in" routerLinkActive="is-active" ariaCurrentWhenActive="page" [routerLinkActiveOptions]="{ exact: true }" class="nav-link" (click)="closeMenu()">Connexion</a>
+                    }
+                </div>
+            </div>
+
+            <div id="main-navbar" class="collapse navbar-collapse" [class.show]="isMenuOpen()">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a routerLink="/recipes" routerLinkActive="is-active" ariaCurrentWhenActive="page" [routerLinkActiveOptions]="{ exact: true }" class="nav-link" (click)="closeMenu()">Recettes</a>
+                    </li>
+                    <li class="nav-item">
+                        <a routerLink="/search" routerLinkActive="is-active" ariaCurrentWhenActive="page" [routerLinkActiveOptions]="{ exact: true }" class="nav-link" (click)="closeMenu()">Recherche</a>
+                    </li>
+                    <li class="nav-item">
+                        <a routerLink="/contact" routerLinkActive="is-active" ariaCurrentWhenActive="page" [routerLinkActiveOptions]="{ exact: true }" class="nav-link" (click)="closeMenu()">Contact</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>

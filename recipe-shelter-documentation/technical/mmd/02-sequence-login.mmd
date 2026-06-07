@@ -1,0 +1,50 @@
+sequenceDiagram
+  autonumber
+  actor U as Utilisateur
+  participant F as Angular (AuthService)
+  participant I as AuthInterceptor
+  participant C as AuthController
+  participant S as AuthService (backend)
+  participant R as UserRepository
+  participant DB as MySQL
+
+  U->>F: Saisit mail + mot de passe
+  F->>I: POST /api/v1/auth/login { mail, password }
+  I->>C: Requête HTTP
+  C->>C: parseLoginBody(req.body)
+  C->>S: login({ mail, password })
+  S->>S: normalizeEmail(mail)
+  S->>R: findAuthByEmail(mail)
+  R->>DB: SELECT User avec Password
+  DB-->>R: UserWithPasswordRow
+  R-->>S: UserWithPassword
+
+  alt Compte introuvable
+    S-->>C: throw unauthorized (AUTH_INVALID_CREDENTIALS)
+    C-->>F: 401 { error }
+    F-->>U: Affiche message d'erreur
+  else Compte trouvé
+    S->>S: bcrypt.compare(password, hash)
+    alt Mot de passe incorrect
+      S-->>C: throw unauthorized (AUTH_INVALID_CREDENTIALS)
+      C-->>F: 401 { error }
+      F-->>U: Affiche message d'erreur
+    else Mot de passe correct
+      alt Status = inactive
+        S-->>C: throw unauthorized (EMAIL_NOT_VALIDATED)
+        C-->>F: 401 { error }
+        F-->>U: Compte non vérifié
+      else Status = banned
+        S-->>C: throw unauthorized (USER_BANNED)
+        C-->>F: 401 { error }
+        F-->>U: Compte suspendu
+      else Status = active
+        S->>S: jwt.sign(payload) — génère token
+        S-->>C: { user, token }
+        C->>C: setSessionCookie(res, token)
+        C-->>F: 200 { user } + Cookie rs_session (HttpOnly)
+        F->>F: SessionService.storeSession(user)
+        F-->>U: Redirection vers /
+      end
+    end
+  end

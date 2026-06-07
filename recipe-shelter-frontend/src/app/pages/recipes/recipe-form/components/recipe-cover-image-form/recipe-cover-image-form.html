@@ -1,0 +1,19 @@
+<section class="rs-section" [formGroup]="form" aria-labelledby="recipe-cover-image-title">
+    <div class="rs-section-heading">
+        <h2 id="recipe-cover-image-title">Image de couverture</h2>
+        <p>Ajoutez une URL d'image pour donner un aperçu visuel à la recette.</p>
+    </div>
+
+    <div class="rs-field">
+        <label class="rs-label" for="coverImageUrl">URL de l'image</label>
+        <input class="rs-input" id="coverImageUrl" type="url" placeholder="https://exemple.fr/image.jpg" formControlName="coverImageUrl" />
+    </div>
+
+    @if (coverImageUrl) {
+    <figure class="rs-cover-preview">
+        <img [src]="coverImageUrl" alt="Apercu de l'image de couverture">
+    </figure>
+    }
+
+    <button class="rs-btn rs-btn-outline" type="button" (click)="clearCoverImage()" [disabled]="readonly || !coverImageUrl">Vider l'image</button>
+</section>

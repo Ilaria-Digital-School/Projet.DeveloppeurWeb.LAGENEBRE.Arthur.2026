@@ -1,0 +1,62 @@
+<section class="rs-admin-users">
+    <a class="rs-back-link" routerLink="/admin/dashboard">← Retour au tableau de bord</a>
+
+    <header class="rs-page-header">
+        <h1 class="rs-admin-users-title">Utilisateurs suspendus</h1>
+        <p>Consultez les comptes bannis et réactivez-les lorsque la situation est résolue.</p>
+    </header>
+
+    @if (isLoading()) {
+    <section class="rs-state-card" aria-live="polite">
+        <p>Chargement des utilisateurs suspendus...</p>
+    </section>
+    } @else if (errorMessage()) {
+    <section class="rs-state-card rs-state-card--error" aria-live="polite">
+        <p>{{ errorMessage() }}</p>
+    </section>
+    } @else if (users().length === 0) {
+    <section class="rs-state-card">
+        <h2>Aucun utilisateur suspendu</h2>
+        <p>Les comptes bannis apparaîtront ici.</p>
+    </section>
+    } @else {
+    <div class="rs-users-grid" aria-label="Liste des utilisateurs suspendus">
+        @for (user of users(); track user.id) {
+        <article class="rs-user-card">
+            <div class="rs-user-card-main">
+                <div class="rs-user-card-heading">
+                    <h2>{{ user.username }}</h2>
+                    <span class="rs-status-badge">Suspendu</span>
+                </div>
+
+                <dl class="rs-user-details">
+                    <div>
+                        <dt>Email</dt>
+                        <dd>{{ user.mail }}</dd>
+                    </div>
+
+                    <div>
+                        <dt>Date</dt>
+                        <dd>{{ user.bannedAt | date: 'dd/MM/yyyy HH:mm' }}</dd>
+                    </div>
+
+                    <div>
+                        <dt>Raison</dt>
+                        <dd>{{ user.bannedReason }}</dd>
+                    </div>
+
+                    <div>
+                        <dt>Par</dt>
+                        <dd>{{ getAdminUsername(user) }}</dd>
+                    </div>
+                </dl>
+            </div>
+
+            <div class="rs-user-actions">
+                <a class="rs-btn rs-btn-outline" [routerLink]="['/admin/users', user.id]">Voir la fiche</a>
+            </div>
+        </article>
+        }
+    </div>
+    }
+</section>

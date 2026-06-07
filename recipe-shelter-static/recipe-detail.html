@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Tarte aux Pommes Normande — Une tarte aux pommes généreuse avec une crème normande onctueuse." />
+  <title>Tarte aux Pommes Normande — Recipe Shelter</title>
+  <link rel="stylesheet" href="css/main.css" />
+  <style>
+    /* ── Detail page layout ── */
+    .rs-recipe-detail {
+      display: grid;
+      gap: 1.5rem;
+    }
+
+    .rs-back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: .4rem;
+      color: var(--rs-primary-dark);
+      font-weight: 700;
+      text-decoration: none;
+      font-size: .9rem;
+    }
+
+    .rs-back-link:hover {
+      text-decoration: underline;
+    }
+
+    /* hero */
+    .rs-recipe-hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(260px, 420px);
+      gap: 1.5rem;
+      align-items: start;
+    }
+
+    .rs-recipe-hero-content {
+      display: grid;
+      gap: .9rem;
+    }
+
+    .rs-recipe-cover-frame {
+      border-radius: 12px;
+      overflow: hidden;
+      aspect-ratio: 4/3;
+    }
+
+    .rs-recipe-cover {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .rs-recipe-title-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 1rem;
+      align-items: start;
+    }
+
+    .rs-recipe-detail h1 {
+      font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+      font-weight: 800;
+      line-height: 1.15;
+    }
+
+    .rs-fav-btn-detail {
+      display: grid;
+      place-items: center;
+      width: 44px;
+      height: 44px;
+      border: 1px solid rgba(26, 26, 26, .12);
+      border-radius: 50%;
+      background: #fff;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, .08);
+      font-size: 1.2rem;
+      transition: color .2s, border-color .2s, transform .2s;
+      flex-shrink: 0;
+    }
+
+    .rs-fav-btn-detail:hover {
+      color: #b42318;
+      border-color: rgba(180, 35, 24, .24);
+      transform: translateY(-1px);
+    }
+
+    .rs-fav-btn-detail:focus-visible {
+      outline: 3px solid var(--rs-focus-ring);
+      outline-offset: 2px;
+    }
+
+    .rs-fav-btn-detail.active {
+      color: #b42318;
+      border-color: rgba(180, 35, 24, .18);
+    }
+
+    /* layout content */
+    .rs-recipe-content {
+      display: grid;
+      gap: 1.5rem;
+    }
+
+    .rs-recipe-layout {
+      display: grid;
+      gap: 1.5rem;
+    }
+
+    /* sections */
+    .rs-detail-section {
+      display: grid;
+      gap: 1rem;
+      padding-top: 1.2rem;
+      border-top: 1px solid rgba(26, 26, 26, .1);
+    }
+
+    .rs-detail-section h2 {
+      font-size: 1.2rem;
+      font-weight: 800;
+    }
+
+    /* ingredients */
+    .rs-ingredients {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: grid;
+      gap: .6rem;
+    }
+
+    .rs-ingredients li {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: .5rem;
+      padding: .5rem 0;
+      border-bottom: 1px solid rgba(26, 26, 26, .06);
+      font-size: .95rem;
+    }
+
+    .rs-ingredients li:last-child {
+      border-bottom: 0;
+    }
+
+    .rs-ingredient-name {
+      font-weight: 600;
+    }
+
+    .rs-ingredient-qty {
+      color: rgba(26, 26, 26, .55);
+      font-size: .88rem;
+    }
+
+    /* steps */
+    .rs-steps {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: grid;
+      gap: .9rem;
+    }
+
+    .rs-steps li {
+      display: grid;
+      grid-template-columns: 36px 1fr;
+      gap: .75rem;
+      align-items: start;
+    }
+
+    .rs-step-num {
+      display: grid;
+      place-items: center;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: rgba(37, 99, 235, .1);
+      color: var(--rs-primary-dark);
+      font-weight: 800;
+      font-size: .95rem;
+      flex-shrink: 0;
+    }
+
+    .rs-steps p {
+      margin: 0;
+      line-height: 1.65;
+      color: rgba(26, 26, 26, .78);
+    }
+
+    /* comments */
+    .rs-comments-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .rs-rating-badge {
+      padding: .5rem .9rem;
+      border: 1px solid rgba(26, 26, 26, .1);
+      border-radius: 8px;
+      background: rgba(37, 99, 235, .06);
+      font-size: .9rem;
+      font-weight: 700;
+      color: var(--rs-primary-dark);
+    }
+
+    .rs-comment-form-wrap {
+      padding: 1.2rem;
+      border: 1px solid rgba(26, 26, 26, .1);
+      border-radius: 10px;
+      background: rgba(26, 26, 26, .025);
+    }
+
+    .rs-comment-form-title {
+      font-size: .95rem;
+      font-weight: 700;
+      margin-bottom: .8rem;
+    }
+
+    .rs-comment-form-row {
+      display: grid;
+      grid-template-columns: minmax(140px, 200px);
+    }
+
+    .rs-comment {
+      padding: 1rem;
+      border: 1px solid rgba(26, 26, 26, .09);
+      border-radius: 8px;
+      background: #fff;
+      display: grid;
+      gap: .6rem;
+    }
+
+    .rs-comment-header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: .5rem;
+    }
+
+    .rs-comment-author {
+      font-weight: 700;
+      font-size: .9rem;
+    }
+
+    .rs-comment-date {
+      font-size: .82rem;
+      color: rgba(26, 26, 26, .5);
+    }
+
+    .rs-comment-rating-badge {
+      padding: .2rem .5rem;
+      border-radius: 999px;
+      background: rgba(212, 245, 66, .3);
+      font-size: .82rem;
+      font-weight: 700;
+    }
+
+    .rs-comment-body {
+      margin: 0;
+      line-height: 1.6;
+      color: rgba(26, 26, 26, .72);
+      font-size: .93rem;
+    }
+
+    .rs-reply {
+      margin-left: 1.5rem;
+      padding: .8rem 1rem;
+      border-left: 3px solid rgba(37, 99, 235, .2);
+      border-radius: 0 8px 8px 0;
+      background: rgba(37, 99, 235, .02);
+    }
+
+    /* sidebar sticky on desktop */
+    @media (min-width: 961px) {
+      .rs-recipe-layout {
+        grid-template-columns: minmax(0, 1fr) minmax(240px, 300px);
+      }
+
+      .rs-recipe-sidebar {
+        position: sticky;
+        top: calc(var(--rs-header-h) + 1.5rem);
+      }
+
+      .rs-recipe-main {
+        order: -1;
+      }
+    }
+
+    @media (max-width: 760px) {
+      .rs-recipe-hero {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ══════════════ EN-TÊTE ══════════════ -->
+  <header class="rs-header" aria-label="En-tête">
+    <div class="rs-shell">
+      <div class="rs-header-inner">
+
+        <a href="index.html" class="rs-brand" aria-label="Accueil Recipe Shelter">Recipe Shelter</a>
+
+        <form id="header-search-form" class="rs-header-search" role="search">
+          <label class="visually-hidden" for="header-search-q">Rechercher une recette</label>
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+            <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398l3.85 3.85a1 1 0 0 0 1.415-1.415zm-5.242 1.15a5.5 5.5 0 1 1 0-11 5.5 5.5 0 0 1 0 11" />
+          </svg>
+          <input id="header-search-q" name="q" type="search" placeholder="Rechercher une recette…" autocomplete="off" aria-label="Rechercher une recette" />
+          <button type="submit" aria-label="Lancer la recherche">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+              <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8" />
+            </svg>
+          </button>
+        </form>
+
+        <button id="hamburger" class="rs-hamburger" type="button" aria-controls="main-nav" aria-expanded="false" aria-label="Afficher le menu principal">
+          <span></span><span></span><span></span>
+        </button>
+
+        <nav id="main-nav" class="rs-nav" aria-label="Navigation principale">
+          <a href="index.html">Accueil</a>
+          <a href="recipes.html" aria-current="page">Recettes</a>
+          <a href="sign-in.html">Connexion</a>
+          <a href="sign-up.html">Inscription</a>
+        </nav>
+
+      </div>
+    </div>
+  </header>
+
+  <!-- ══════════════ CONTENU ══════════════ -->
+  <main class="rs-main">
+    <div class="rs-shell">
+      <div class="rs-recipe-detail">
+
+        <a href="recipes.html" class="rs-back-link">← Retour aux recettes</a>
+
+        <article class="rs-recipe" aria-label="Tarte aux Pommes Normande">
+
+          <!-- Hero -->
+          <header class="rs-recipe-hero">
+            <div class="rs-recipe-hero-content">
+              <span class="rs-category">Desserts</span>
+              <div class="rs-recipe-title-row">
+                <h1>Tarte aux Pommes Normande</h1>
+                <button type="button" class="rs-fav-btn-detail" data-fav-btn="tarte-aux-pommes" aria-label="Ajouter aux favoris">♡</button>
+              </div>
+              <p style="color:rgba(26,26,26,.65);line-height:1.65;max-width:680px;">Une tarte aux pommes généreuse avec une crème normande onctueuse et une pâte brisée maison croustillante. Parfaite pour finir un repas dominical en beauté.</p>
+              <div class="rs-recipe-meta" aria-label="Informations de la recette">
+                <span class="rs-meta-item">Prépa : 30 min</span>
+                <span class="rs-meta-item">Cuisson : 45 min</span>
+                <span class="rs-meta-item">8 portions</span>
+                <span class="rs-meta-item">★ 4.8 (34 avis)</span>
+                <span class="rs-meta-item">Par <a href="#">Sophie M.</a></span>
+              </div>
+              <ul class="rs-chip-list" aria-label="Tags">
+                <li>Sucré</li>
+                <li>Automne</li>
+                <li>Classique</li>
+                <li>Français</li>
+              </ul>
+            </div>
+            <div class="rs-recipe-cover-frame">
+              <img class="rs-recipe-cover" src="assets/images/placeholder.svg" alt="Tarte aux Pommes Normande" width="720" height="540" fetchpriority="high" />
+            </div>
+          </header>
+
+          <!-- Contenu -->
+          <div class="rs-recipe-content">
+            <div class="rs-recipe-layout">
+
+              <!-- Sidebar : ingrédients + ustensiles -->
+              <aside class="rs-recipe-sidebar" aria-label="Ingrédients et ustensiles">
+                <section class="rs-detail-section">
+                  <h2>Ingrédients</h2>
+                  <p style="font-size:.85rem;color:rgba(26,26,26,.5);">Pour 8 portions</p>
+                  <ul class="rs-ingredients">
+                    <li><span class="rs-ingredient-name">Pommes Golden</span><span class="rs-ingredient-qty">4 grosses</span></li>
+                    <li><span class="rs-ingredient-name">Farine T55</span><span class="rs-ingredient-qty">250 g</span></li>
+                    <li><span class="rs-ingredient-name">Beurre demi-sel</span><span class="rs-ingredient-qty">125 g</span></li>
+                    <li><span class="rs-ingredient-name">Sucre en poudre</span><span class="rs-ingredient-qty">80 g</span></li>
+                    <li><span class="rs-ingredient-name">Œufs</span><span class="rs-ingredient-qty">3</span></li>
+                    <li><span class="rs-ingredient-name">Crème fraîche épaisse</span><span class="rs-ingredient-qty">200 ml</span></li>
+                    <li><span class="rs-ingredient-name">Calvados</span><span class="rs-ingredient-qty">2 c. à soupe</span></li>
+                    <li><span class="rs-ingredient-name">Sucre vanillé</span><span class="rs-ingredient-qty">1 sachet</span></li>
+                    <li><span class="rs-ingredient-name">Sel</span><span class="rs-ingredient-qty">1 pincée</span></li>
+                  </ul>
+                </section>
+                <section class="rs-detail-section">
+                  <h2>Ustensiles</h2>
+                  <ul class="rs-ingredients">
+                    <li><span class="rs-ingredient-name">Moule à tarte 26 cm</span></li>
+                    <li><span class="rs-ingredient-name">Robot pâtissier ou saladier</span></li>
+                    <li><span class="rs-ingredient-name">Rouleau à pâtisserie</span></li>
+                    <li><span class="rs-ingredient-name">Fouet</span></li>
+                  </ul>
+                </section>
+              </aside>
+
+              <!-- Étapes -->
+              <section class="rs-recipe-main rs-detail-section" aria-label="Étapes de préparation">
+                <h2>Étapes</h2>
+                <ol class="rs-steps">
+                  <li>
+                    <span class="rs-step-num" aria-hidden="true">1</span>
+                    <p><strong>Préparer la pâte brisée :</strong> mélanger la farine, le beurre coupé en dés froids et le sel du bout des doigts jusqu'à obtenir une consistance sableuse. Ajouter 3–4 c. à soupe d'eau froide, former une boule sans trop travailler. Filmer et réfrigérer 30 minutes.</p>
+                  </li>
+                  <li>
+                    <span class="rs-step-num" aria-hidden="true">2</span>
+                    <p><strong>Préchauffer le four</strong> à 180 °C (thermostat 6). Étaler la pâte sur un plan fariné et foncer le moule à tarte beurré. Piquer le fond à la fourchette.</p>
+                  </li>
+                  <li>
+                    <span class="rs-step-num" aria-hidden="true">3</span>
+                    <p><strong>Préparer les pommes :</strong> éplucher, épépiner et couper les pommes en fines lamelles. Les disposer en rosace sur le fond de tarte.</p>
+                  </li>
+                  <li>
+                    <span class="rs-step-num" aria-hidden="true">4</span>
+                    <p><strong>Préparer la crème normande :</strong> fouetter les œufs avec le sucre jusqu'à blanchiment. Ajouter la crème fraîche, le sucre vanillé et le calvados. Mélanger.</p>
+                  </li>
+                  <li>
+                    <span class="rs-step-num" aria-hidden="true">5</span>
+                    <p><strong>Assembler :</strong> verser la crème normande sur les pommes. Enfourner pour 40–45 minutes jusqu'à ce que la crème soit dorée et prise.</p>
+                  </li>
+                  <li>
+                    <span class="rs-step-num" aria-hidden="true">6</span>
+                    <p><strong>Laisser tiédir</strong> avant de démouler. Déguster tiède ou froid, avec une cuillère de crème fraîche.</p>
+                  </li>
+                </ol>
+              </section>
+
+            </div><!-- /rs-recipe-layout -->
+
+            <!-- Commentaires -->
+            <section class="rs-detail-section" aria-labelledby="comments-title">
+              <div class="rs-comments-header">
+                <h2 id="comments-title">Commentaires <span
+                    style="font-weight:400;font-size:.9rem;color:rgba(26,26,26,.5)">(3)</span></h2>
+                <div class="rs-rating-badge" aria-label="Note moyenne : 4,8 sur 5">★ 4.8 / 5 — 34 notes</div>
+              </div>
+
+              <!-- Formulaire de commentaire -->
+              <div class="rs-comment-form-wrap" aria-label="Laisser un commentaire">
+                <p class="rs-comment-form-title">Laisser un commentaire</p>
+                <form class="rs-form" id="comment-form" novalidate>
+                  <div class="rs-comment-form-row">
+                    <div class="rs-field">
+                      <label class="rs-label" for="comment-rating">Note (optionnel)</label>
+                      <select class="rs-input" id="comment-rating" name="rating">
+                        <option value="">— Pas de note —</option>
+                        <option value="5">★★★★★ — Excellent</option>
+                        <option value="4">★★★★ — Très bien</option>
+                        <option value="3">★★★ — Bien</option>
+                        <option value="2">★★ — Moyen</option>
+                        <option value="1">★ — Décevant</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="rs-field">
+                    <label class="rs-label" for="comment-text">Votre commentaire</label>
+                    <textarea class="rs-input" id="comment-text" name="comment" placeholder="Partagez votre expérience avec cette recette…" required aria-required="true" aria-describedby="comment-text-error"></textarea>
+                    <p id="comment-text-error" class="rs-field-error" role="alert"></p>
+                  </div>
+                  <div style="display:flex;gap:.5rem;flex-wrap:wrap;">
+                    <button type="submit" class="rs-btn rs-btn-primary">Publier</button>
+                    <button type="reset" class="rs-btn rs-btn-outline">Annuler</button>
+                  </div>
+                  <p id="comment-success" style="color:#067647;font-weight:600;display:none;" aria-live="polite">Votre commentaire a été publié avec succès.</p>
+                </form>
+              </div>
+
+              <!-- Liste des commentaires -->
+              <div aria-label="Liste des commentaires" style="display:grid;gap:.75rem;">
+
+                <div class="rs-comment">
+                  <div class="rs-comment-header-row">
+                    <div style="display:flex;gap:.5rem;align-items:center;flex-wrap:wrap;">
+                      <span class="rs-comment-author">Marie-Claude B.</span>
+                      <span class="rs-comment-rating-badge">★★★★★</span>
+                    </div>
+                    <span class="rs-comment-date">il y a 3 jours</span>
+                  </div>
+                  <p class="rs-comment-body">Recette testée ce week-end, un vrai délice ! Le calvados apporte un parfum incomparable. J'ai ajouté un peu de cannelle dans la crème, très bon aussi.</p>
+                  <div style="display:grid;gap:.75rem;margin-top:.25rem;">
+                    <div class="rs-comment rs-reply">
+                      <div class="rs-comment-header-row">
+                        <span class="rs-comment-author">Sophie M. <span
+                            style="font-weight:400;font-size:.82rem;color:rgba(26,26,26,.5)">(autrice)</span></span>
+                        <span class="rs-comment-date">il y a 2 jours</span>
+                      </div>
+                      <p class="rs-comment-body">Merci beaucoup ! La cannelle est effectivement une très bonne idée, je l'ajouterai dans la prochaine version.</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="rs-comment">
+                  <div class="rs-comment-header-row">
+                    <div style="display:flex;gap:.5rem;align-items:center;">
+                      <span class="rs-comment-author">Thomas R.</span>
+                      <span class="rs-comment-rating-badge">★★★★</span>
+                    </div>
+                    <span class="rs-comment-date">il y a 1 semaine</span>
+                  </div>
+                  <p class="rs-comment-body">Très bonne recette, la pâte est croustillante à souhait. Je n'avais pas de calvados, j'ai mis du jus de pomme, ça marche très bien aussi.</p>
+                </div>
+
+                <div class="rs-comment">
+                  <div class="rs-comment-header-row">
+                    <div style="display:flex;gap:.5rem;align-items:center;">
+                      <span class="rs-comment-author">Isabelle K.</span>
+                      <span class="rs-comment-rating-badge">★★★★★</span>
+                    </div>
+                    <span class="rs-comment-date">il y a 2 semaines</span>
+                  </div>
+                  <p class="rs-comment-body">Parfaite pour le dimanche ! Toute la famille a adoré. La crème normande est le secret de cette recette.</p>
+                </div>
+
+              </div>
+            </section>
+
+          </div><!-- /rs-recipe-content -->
+        </article>
+
+      </div>
+    </div>
+  </main>
+
+  <footer class="rs-footer">
+    <div class="rs-shell">
+      <div class="rs-footer-inner">
+        <span>© 2025 Recipe Shelter</span>
+        <nav class="rs-footer-links" aria-label="Liens du pied de page">
+          <a href="#">Mentions légales</a>
+          <a href="#">Politique de confidentialité</a>
+          <a href="#">CGU</a>
+          <a href="#">Contact</a>
+        </nav>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script>
+    // Validation commentaire inline
+    document.getElementById("comment-form").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const txt = document.getElementById("comment-text");
+      const err = document.getElementById("comment-text-error");
+      const ok = document.getElementById("comment-success");
+      if (!txt.value.trim()) {
+        err.textContent = "Le commentaire ne peut pas être vide.";
+        err.classList.add("visible");
+        txt.classList.add("invalid");
+        txt.focus();
+        return;
+      }
+      err.classList.remove("visible");
+      txt.classList.remove("invalid");
+      e.target.reset();
+      ok.style.display = "block";
+      setTimeout(() => { ok.style.display = "none"; }, 4000);
+    });
+  </script>
+</body>
+
+</html>

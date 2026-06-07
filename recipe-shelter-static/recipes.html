@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Recherchez des recettes par mot-clé, catégorie, ingrédient ou temps de préparation." />
+  <title>Recherche de recettes — Recipe Shelter</title>
+  <link rel="stylesheet" href="css/main.css" />
+  <style>
+    /* ── Page-specific styles ── */
+    .rs-search-layout {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 2rem;
+      align-items: start;
+    }
+
+    .rs-search-sidebar {
+      position: sticky;
+      top: calc(var(--rs-header-h) + 1.5rem);
+    }
+
+    .rs-search-panel {
+      background: #fff;
+      border: 1px solid rgba(26, 26, 26, .1);
+      border-radius: 12px;
+      padding: 1.5rem;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, .04);
+    }
+
+    .rs-search-panel h2 {
+      font-size: 1.1rem;
+      margin-bottom: 1.2rem;
+      padding-bottom: .7rem;
+      border-bottom: 1px solid rgba(26, 26, 26, .08);
+    }
+
+    .rs-search-actions {
+      display: grid;
+      gap: .5rem;
+      margin-top: 1.2rem;
+    }
+
+    .rs-results-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: .75rem;
+      margin-bottom: 1.2rem;
+    }
+
+    .rs-results-count {
+      font-size: .9rem;
+      color: rgba(26, 26, 26, .55);
+      font-weight: 600;
+    }
+
+    @media (max-width: 767px) {
+      .rs-search-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .rs-search-sidebar {
+        position: static;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ══════════════ EN-TÊTE ══════════════ -->
+  <header class="rs-header" aria-label="En-tête">
+    <div class="rs-shell">
+      <div class="rs-header-inner">
+
+        <a href="index.html" class="rs-brand" aria-label="Accueil Recipe Shelter">Recipe Shelter</a>
+
+        <form id="header-search-form" class="rs-header-search" role="search">
+          <label class="visually-hidden" for="header-search-q">Rechercher une recette</label>
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+            <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398l3.85 3.85a1 1 0 0 0 1.415-1.415zm-5.242 1.15a5.5 5.5 0 1 1 0-11 5.5 5.5 0 0 1 0 11" />
+          </svg>
+          <input id="header-search-q" name="q" type="search" placeholder="Rechercher une recette…" autocomplete="off" aria-label="Rechercher une recette" />
+          <button type="submit" aria-label="Lancer la recherche">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+              <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8" />
+            </svg>
+          </button>
+        </form>
+
+        <button id="hamburger" class="rs-hamburger" type="button" aria-controls="main-nav" aria-expanded="false" aria-label="Afficher le menu principal">
+          <span></span><span></span><span></span>
+        </button>
+
+        <nav id="main-nav" class="rs-nav" aria-label="Navigation principale">
+          <a href="index.html">Accueil</a>
+          <a href="recipes.html" aria-current="page">Recettes</a>
+          <a href="sign-in.html">Connexion</a>
+          <a href="sign-up.html">Inscription</a>
+        </nav>
+
+      </div>
+    </div>
+  </header>
+
+  <!-- ══════════════ CONTENU ══════════════ -->
+  <main class="rs-main">
+    <div class="rs-shell">
+
+      <header style="margin-bottom:2rem;">
+        <h1 style="font-size:clamp(1.6rem,3vw,2.2rem);font-weight:800;">Recherche de recettes</h1>
+        <p style="color:rgba(26,26,26,.55);margin-top:.4rem;">Trouvez une recette publiée par mot-clé, catégorie ou temps de préparation.</p>
+      </header>
+
+      <div class="rs-search-layout">
+
+        <!-- Panneau de filtres -->
+        <aside class="rs-search-sidebar" aria-label="Filtres de recherche">
+          <div class="rs-search-panel">
+            <h2>Filtres</h2>
+            <form id="search-form" class="rs-form">
+
+              <div class="rs-field">
+                <label class="rs-label" for="search-q">Mots-clés</label>
+                <input class="rs-input" id="search-q" type="search" placeholder="Nom, description…" autocomplete="off" />
+              </div>
+
+              <div class="rs-field">
+                <label class="rs-label" for="search-category">Catégorie</label>
+                <select class="rs-input" id="search-category">
+                  <option value="">Toutes les catégories</option>
+                  <option value="Desserts">Desserts</option>
+                  <option value="Viandes">Viandes</option>
+                  <option value="Pâtes & Riz">Pâtes & Riz</option>
+                  <option value="Salades">Salades</option>
+                  <option value="Soupes">Soupes</option>
+                </select>
+              </div>
+
+              <div class="rs-field">
+                <label class="rs-label" for="search-max-time">Temps total maximum</label>
+                <select class="rs-input" id="search-max-time">
+                  <option value="">Pas de limite</option>
+                  <option value="30">30 min</option>
+                  <option value="60">1 heure</option>
+                  <option value="120">2 heures</option>
+                </select>
+              </div>
+
+              <div class="rs-search-actions">
+                <button type="submit" class="rs-btn rs-btn-primary">Rechercher</button>
+                <button type="button" id="btn-reset" class="rs-btn rs-btn-outline">Réinitialiser</button>
+              </div>
+
+            </form>
+          </div>
+        </aside>
+
+        <!-- Résultats -->
+        <section aria-label="Résultats de recherche">
+          <!-- Zone annonce lecteur d'écran -->
+          <p id="search-live-region" class="visually-hidden" aria-live="polite" aria-atomic="true"></p>
+
+          <div class="rs-results-header">
+            <p id="results-count" class="rs-results-count" aria-live="polite"></p>
+          </div>
+
+          <div id="results-grid" class="rs-recipes-grid"></div>
+          <nav id="pagination" class="rs-pagination" aria-label="Pagination"></nav>
+        </section>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- ══════════════ PIED DE PAGE ══════════════ -->
+  <footer class="rs-footer">
+    <div class="rs-shell">
+      <div class="rs-footer-inner">
+        <span>© 2025 Recipe Shelter</span>
+        <nav class="rs-footer-links" aria-label="Liens du pied de page">
+          <a href="#">Mentions légales</a>
+          <a href="#">Politique de confidentialité</a>
+          <a href="#">CGU</a>
+          <a href="#">Contact</a>
+        </nav>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script src="js/search.js"></script>
+</body>
+
+</html>

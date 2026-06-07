@@ -1,0 +1,54 @@
+<section class="rs-public-profile">
+    <a class="rs-back-link" routerLink="/recipes">&larr; Retour aux recettes</a>
+
+    @if (favoriteError()) {
+    <section class="rs-state-card rs-state-card--error" aria-live="polite">
+        <p>{{ favoriteError() }}</p>
+    </section>
+    }
+
+    @if (isLoading()) {
+    <section class="rs-state-card" aria-live="polite">
+        <p>Chargement du profil...</p>
+    </section>
+    } @else if (notFound()) {
+    <section class="rs-state-card">
+        <h1>Profil introuvable</h1>
+        <p>Cet utilisateur n'existe pas ou n'a pas de profil public disponible.</p>
+    </section>
+    } @else if (errorMessage() && !profile()) {
+    <section class="rs-state-card rs-state-card--error" aria-live="polite">
+        <h1>Impossible de charger le profil</h1>
+        <p>{{ errorMessage() }}</p>
+    </section>
+    } @else if (profile(); as profile) {
+    <header class="rs-profile-header">
+        <div class="rs-profile-avatar" aria-hidden="true">{{ getInitial(profile.username) }}</div>
+
+        <div class="rs-profile-heading">
+            <p class="rs-profile-eyebrow">Profil public</p>
+            <h1>{{ profile.username }}</h1>
+            <p>{{ getRecipesCountLabel(profile.publishedRecipes.length) }}</p>
+        </div>
+    </header>
+
+    <section class="rs-profile-recipes" aria-labelledby="publishedRecipesTitle">
+        <div class="rs-section-header">
+            <h2 id="publishedRecipesTitle">Recettes publiées</h2>
+        </div>
+
+        @if (profile.publishedRecipes.length === 0) {
+        <section class="rs-state-card rs-state-card--empty">
+            <h2>Aucune recette publiée</h2>
+            <p>{{ profile.username }} n'a pas encore publié de recette.</p>
+        </section>
+        } @else {
+        <div class="rs-recipes-grid" aria-label="Recettes publiées par cet utilisateur">
+            @for (recipe of profile.publishedRecipes; track recipe.id) {
+            <rs-recipe-card [recipe]="recipe" [favoriteUpdating]="isFavoriteUpdating(recipe.id)" (favoriteToggled)="onFavoriteToggle($event)" />
+            }
+        </div>
+        }
+    </section>
+    }
+</section>

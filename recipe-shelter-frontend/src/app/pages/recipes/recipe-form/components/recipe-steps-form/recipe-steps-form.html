@@ -1,0 +1,7 @@
+<div class="rs-field" [formGroup]="form">
+  <label class="rs-label" [attr.for]="descriptionInputId">Étape {{ stepNumber }}</label>
+  <textarea class="rs-textarea" [id]="descriptionInputId" rows="4" placeholder="La description de l'étape" formControlName="description"></textarea>
+  @if (shouldShowDescriptionError()) {
+  <span class="rs-field-error">Décrivez au moins une étape avant de soumettre la recette.</span>
+  }
+</div>

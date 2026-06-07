@@ -1,0 +1,264 @@
+# ============================================
+# Recipes
+# ============================================
+
+@baseUrl = http://localhost:3000/api/v1
+@sessionCookie = PASTE_RS_SESSION_COOKIE_HERE
+@recipeId = 1
+@recipeSlug = cake-marbre-maison
+
+### Published recipes - public
+GET {{baseUrl}}/recipes
+
+### Published recipes - public paginated
+GET {{baseUrl}}/recipes?page=1&limit=12
+
+### Published recipes - search by title
+GET {{baseUrl}}/recipes?q=porc&page=1&limit=12
+
+### Published recipes - filter by category
+GET {{baseUrl}}/recipes?categoryId=3&page=1&limit=12
+
+### Published recipes - search by title and category
+GET {{baseUrl}}/recipes?q=porc&categoryId=3&page=2&limit=12
+
+### Published recipes - legacy search route
+GET {{baseUrl}}/recipes/search?q=porc&categoryId=3&page=1&limit=12
+
+### Recent published recipes - public
+GET {{baseUrl}}/recipes/recent?limit=12
+
+### Published recipes - filter by tags
+GET {{baseUrl}}/recipes/search?tagIds=1,2
+
+### Published recipes - filter by ingredients
+GET {{baseUrl}}/recipes/search?ingredientIds=18,103
+
+### Published recipes - filter by max total time
+GET {{baseUrl}}/recipes/search?maxTotalTimeMinutes=45
+
+### Published recipes - search with all filters
+GET {{baseUrl}}/recipes/search?q=porc&categoryId=3&tagIds=1,2&ingredientIds=18,103&maxTotalTimeMinutes=60
+
+### Published recipes - with optional auth, includes isFavorite for current user
+GET {{baseUrl}}/recipes
+Cookie: rs_session={{sessionCookie}}
+
+### Published recipe detail by slug
+GET {{baseUrl}}/recipes/{{recipeSlug}}
+Cookie: rs_session={{sessionCookie}}
+
+# Expected response includes:
+# {
+#   "author": {
+#     "id": 12,
+#     "username": "arthur"
+#   },
+#   "commentsCount": 4,
+#   "averageRating": 4.5,
+#   "ratingsCount": 2,
+#   "comments": [
+#     {
+#       "id": 1,
+#       "isModerated": false,
+#       "isDeleted": false,
+#       "author": {
+#         "id": 10,
+#         "username": "alice"
+#       },
+#       "parentCommentId": null,
+#       "moderatedAt": null,
+#       "rating": 5,
+#       "comment": "Super recette, facile à suivre.",
+#       "createdAt": "2026-05-10T10:00:00.000Z",
+#       "updatedAt": "2026-05-10T10:00:00.000Z",
+#       "children": [
+#         {
+#           "id": 2,
+#           "isModerated": false,
+#           "isDeleted": false,
+#           "author": {
+#             "id": 11,
+#             "username": "bob"
+#           },
+#           "parentCommentId": 1,
+#           "moderatedAt": null,
+#           "rating": null,
+#           "comment": "Merci pour l'astuce.",
+#           "createdAt": "2026-05-10T10:05:00.000Z",
+#           "updatedAt": "2026-05-10T10:05:00.000Z",
+#           "children": []
+#         },
+#         {
+#           "id": 3,
+#           "isModerated": false,
+#           "isDeleted": true,
+#           "author": {
+#             "id": 12,
+#             "username": "charlie"
+#           },
+#           "parentCommentId": 1,
+#           "moderatedAt": null,
+#           "rating": null,
+#           "comment": "Commentaire supprimé par son auteur.",
+#           "createdAt": "2026-05-10T10:10:00.000Z",
+#           "updatedAt": "2026-05-10T10:12:00.000Z",
+#           "children": []
+#         },
+#         {
+#           "id": 4,
+#           "isModerated": true,
+#           "isDeleted": false,
+#           "author": {
+#             "id": 13,
+#             "username": "diane"
+#           },
+#           "parentCommentId": 1,
+#           "moderatedAt": "2026-05-10T10:20:00.000Z",
+#           "rating": null,
+#           "comment": "Ce commentaire a été masqué par la modération.",
+#           "createdAt": "2026-05-10T10:15:00.000Z",
+#           "updatedAt": "2026-05-10T10:20:00.000Z",
+#           "children": []
+#         }
+#       ]
+#     }
+#   ]
+# }
+
+### My recipes
+GET {{baseUrl}}/recipes/me?page=1&limit=10
+Cookie: rs_session={{sessionCookie}}
+
+### Create recipe draft - minimal
+POST {{baseUrl}}/recipes
+Content-Type: application/json
+Cookie: rs_session={{sessionCookie}}
+
+{
+  "title": "Tarte aux pommes"
+}
+
+### Create recipe draft - full body
+POST {{baseUrl}}/recipes
+Content-Type: application/json
+Cookie: rs_session={{sessionCookie}}
+
+{
+  "title": "Cake marbre maison",
+  "categoryId": 2,
+  "description": "Version brouillon pour test HTTP",
+  "coverImageUrl": null,
+  "prepTimeMinutes": 15,
+  "restTimeMinutes": null,
+  "cookTimeMinutes": 45,
+  "servings": 6,
+  "tagIds": [1, 2],
+  "ingredients": [
+    {
+      "ingredientId": 18,
+      "quantity": 200,
+      "unit": "g",
+      "note": "Tamisee"
+    },
+    {
+      "ingredientId": 103,
+      "quantity": 3,
+      "unit": "piece"
+    }
+  ],
+  "steps": [
+    {
+      "description": "Prechauffer le four a 180 degres."
+    },
+    {
+      "description": "Melanger les ingredients puis verser dans un moule."
+    }
+  ],
+  "equipments": [
+    {
+      "equipmentId": 1
+    },
+    {
+      "equipmentId": 2
+    }
+  ]
+}
+
+### Create recipe draft - missing auth
+POST {{baseUrl}}/recipes
+Content-Type: application/json
+
+{
+  "title": "Soupe du soir"
+}
+
+### Create recipe draft - missing title
+POST {{baseUrl}}/recipes
+Content-Type: application/json
+Cookie: rs_session={{sessionCookie}}
+
+{
+  "description": "Pas de titre"
+}
+
+### Create recipe draft - title too short
+POST {{baseUrl}}/recipes
+Content-Type: application/json
+Cookie: rs_session={{sessionCookie}}
+
+{
+  "title": "Cake"
+}
+
+### Create recipe draft - invalid servings type
+POST {{baseUrl}}/recipes
+Content-Type: application/json
+Cookie: rs_session={{sessionCookie}}
+
+{
+  "title": "Cake au citron",
+  "servings": "6"
+}
+
+### Get my recipe by id
+GET {{baseUrl}}/recipes/me/{{recipeId}}
+Cookie: rs_session={{sessionCookie}}
+
+### Update recipe draft
+PATCH {{baseUrl}}/recipes/me/{{recipeId}}
+Content-Type: application/json
+Cookie: rs_session={{sessionCookie}}
+
+{
+  "title": "Cake marbre maison v2",
+  "description": "Version mise a jour pour test HTTP",
+  "ingredients": [
+    {
+      "ingredientId": 18,
+      "quantity": 250,
+      "unit": "g"
+    }
+  ],
+  "steps": [
+    {
+      "description": "Prechauffer le four."
+    },
+    {
+      "description": "Cuire pendant 45 minutes."
+    }
+  ],
+  "equipments": [
+    {
+      "equipmentId": 1
+    }
+  ]
+}
+
+### Submit recipe draft
+POST {{baseUrl}}/recipes/me/{{recipeId}}/submit
+Cookie: rs_session={{sessionCookie}}
+
+### Archive my recipe
+POST {{baseUrl}}/recipes/me/{{recipeId}}/archive
+Cookie: rs_session={{sessionCookie}}

@@ -1,0 +1,33 @@
+graph TD
+  subgraph CLIENT["Client Angular"]
+    ANG[Angular Services\nHTTP + Interceptor JWT]
+  end
+
+  subgraph API["Couche HTTP — Express"]
+    MW[Middlewares\nrequireAuth · requireAdmin · rateLimiter · errorHandler]
+    CT[Controllers\nAuthController · RecipesController · CommentsController\nFavoritesController · AdminController · UsersController]
+  end
+
+  subgraph SVC["Couche Métier — Services"]
+    AS[AuthService\nlogin · register · signToken]
+    RS[RecipeService\ncreate · submit · archive · search]
+    CS[CommentsService\ncreate · softDelete · moderate]
+    FS[FavoritesService\nadd · remove · findByUser]
+    AD[AdminServices\nrecipes · comments · users]
+  end
+
+  subgraph REPO["Couche Données — Repositories"]
+    RI[Interfaces\nUserRepository · RecipeRepository\nCommentRepository · FavoriteRepository]
+    RM[Implémentations MySQL\nUserRepositoryMySQL · RecipeRepositoryMySQL]
+  end
+
+  subgraph DB["Base de données"]
+    MY[(MySQL 8\nrecipe_shelter)]
+  end
+
+  ANG -->|HTTP + cookie rs_session| MW
+  MW --> CT
+  CT --> AS & RS & CS & FS & AD
+  AS & RS & CS & FS & AD --> RI
+  RI -.->|implémentées par| RM
+  RM -->|mysql2 pool| MY

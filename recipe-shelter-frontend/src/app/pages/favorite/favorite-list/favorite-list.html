@@ -1,0 +1,5 @@
+<rs-recipe-list-shell title="Mes favoris" subtitle="Retrouvez les recettes que vous avez gardées de côté." emptyTitle="Aucune recette favorite." emptyDescription="Ajoutez des recettes à vos favoris pour les retrouver ici." [loading]="isLoading()" [error]="errorMessage()" [isEmpty]="recipes().length === 0" [pagination]="pagination()" (pageChange)="onPageChange($event)">
+    @for (recipe of recipes(); track recipe.id) {
+    <rs-recipe-card [recipe]="recipe" [favoriteUpdating]="isFavoriteUpdating(recipe.id)" (favoriteToggled)="onFavoriteToggle($event)" />
+    }
+</rs-recipe-list-shell>

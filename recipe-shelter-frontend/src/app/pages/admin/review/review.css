@@ -1,0 +1,327 @@
+.rs-admin-review,
+.rs-review-header,
+.rs-recipe-content,
+.rs-actions,
+.rs-rejection-form {
+    display: grid;
+    gap: 16px;
+}
+
+.rs-admin-review {
+    gap: 22px;
+}
+
+.rs-back-link {
+    width: fit-content;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--rs-primary-dark);
+    font-weight: 700;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.rs-review-header h1 {
+    margin: 0;
+    color: rgb(var(--rs-dark-rgb) / 0.92);
+    font-size: clamp(1.8rem, 3.2vw, 2.4rem);
+    line-height: 1.15;
+    overflow-wrap: anywhere;
+}
+
+.rs-review-recipe-title {
+    margin: 8px 0 0;
+    color: var(--rs-primary-dark);
+    font-size: clamp(1.25rem, 2.4vw, 1.8rem);
+    font-weight: 750;
+    line-height: 1.2;
+    overflow-wrap: anywhere;
+}
+
+.rs-chip-list {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.rs-review-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(280px, 340px);
+    gap: clamp(16px, 3vw, 28px);
+    align-items: start;
+}
+
+.rs-card,
+.rs-state-card,
+.rs-cover {
+    border: 1px solid rgb(var(--rs-dark-rgb) / 0.10);
+    border-radius: 8px;
+    background: white;
+}
+
+.rs-card,
+.rs-state-card {
+    padding: clamp(18px, 3vw, 24px);
+}
+
+.rs-card h2,
+.rs-state-card h1,
+.rs-state-card p,
+.rs-submission-summary,
+.rs-description {
+    margin: 0;
+}
+
+.rs-card h2 {
+    margin-bottom: 14px;
+    color: rgb(var(--rs-dark-rgb) / 0.88);
+    font-size: 1.18rem;
+}
+
+.rs-description,
+.rs-submission-summary,
+.rs-muted,
+.rs-step-list {
+    color: rgb(var(--rs-dark-rgb) / 0.66);
+    line-height: 1.65;
+    overflow-wrap: anywhere;
+}
+
+.rs-submission-summary {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 0;
+}
+
+.rs-submission-summary span + span::before {
+    content: "•";
+    padding-inline: 8px;
+    color: rgb(var(--rs-dark-rgb) / 0.66);
+}
+
+.rs-cover {
+    margin: 0;
+    overflow: hidden;
+}
+
+.rs-cover img {
+    display: block;
+    width: 100%;
+    max-height: 420px;
+    object-fit: cover;
+}
+
+.rs-info-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+    margin: 0;
+}
+
+.rs-info-grid div,
+.rs-status-row {
+    padding: 12px 14px;
+    border: 1px solid rgb(var(--rs-dark-rgb) / 0.09);
+    border-radius: 8px;
+}
+
+.rs-info-grid dt {
+    margin-bottom: 4px;
+    color: rgb(var(--rs-dark-rgb) / 0.66);
+}
+
+.rs-info-grid dd {
+    margin: 0;
+    color: rgb(var(--rs-dark-rgb) / 0.88);
+    font-weight: 700;
+    overflow-wrap: anywhere;
+}
+
+.rs-ingredient-list,
+.rs-step-list,
+.rs-chip-list {
+    margin: 0;
+}
+
+.rs-ingredient-list,
+.rs-chip-list {
+    padding: 0;
+    list-style: none;
+}
+
+.rs-ingredient-list {
+    display: grid;
+    gap: 10px;
+}
+
+.rs-ingredient-list li {
+    display: grid;
+    grid-template-columns: minmax(92px, auto) minmax(0, 1fr);
+    gap: 6px 12px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgb(var(--rs-dark-rgb) / 0.08);
+}
+
+.rs-ingredient-list li:last-child {
+    padding-bottom: 0;
+    border-bottom: 0;
+}
+
+.rs-ingredient-list span,
+.rs-ingredient-list em {
+    color: rgb(var(--rs-dark-rgb) / 0.66);
+    font-size: 0.9rem;
+}
+
+.rs-ingredient-list strong {
+    color: rgb(var(--rs-dark-rgb) / 0.86);
+    overflow-wrap: anywhere;
+}
+
+.rs-ingredient-list em {
+    grid-column: 2;
+}
+
+.rs-step-list {
+    display: grid;
+    gap: 12px;
+    padding-left: 24px;
+}
+
+.rs-chip-list {
+    gap: 8px;
+}
+
+.rs-chip-list li {
+    padding: 8px 12px;
+    border: 1px solid rgb(var(--rs-dark-rgb) / 0.10);
+    border-radius: 999px;
+    color: rgb(var(--rs-dark-rgb) / 0.72);
+}
+
+.rs-card--sticky {
+    position: sticky;
+    top: 18px;
+    display: grid;
+    gap: 16px;
+}
+
+.rs-status-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    background: rgb(var(--rs-primary-rgb) / 0.06);
+}
+
+.rs-btn[disabled] {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.rs-btn-danger-outline {
+    border-color: rgb(180 35 24 / 0.32);
+    background: white;
+    color: #b42318;
+}
+
+.rs-btn-danger {
+    border-color: #b42318;
+    background: #b42318;
+    color: white;
+}
+
+.rs-btn-outline {
+    border-color: rgb(var(--rs-primary-rgb) / 0.34);
+    background: white;
+    color: var(--rs-primary-dark);
+}
+
+.rs-label {
+    color: rgb(var(--rs-dark-rgb) / 0.72);
+    font-weight: 650;
+}
+
+.rs-textarea {
+    width: 100%;
+    min-height: 130px;
+    resize: vertical;
+    border: 1px solid rgb(var(--rs-dark-rgb) / 0.28);
+    border-radius: 14px;
+    padding: 12px 14px;
+    box-sizing: border-box;
+}
+
+.rs-textarea:focus {
+    outline: 3px solid var(--rs-focus-ring);
+    outline-offset: 2px;
+    border-color: var(--rs-accent);
+    box-shadow: 0 0 0 3px rgb(var(--rs-accent-rgb) / 0.25);
+}
+
+.rs-field-error,
+.rs-state-card--error {
+    border-color: rgb(180 35 24 / 0.24);
+    background: rgb(180 35 24 / 0.06);
+    color: #b42318;
+}
+
+.rs-state-card--success {
+    border-color: rgb(22 101 52 / 0.24);
+    background: rgb(22 101 52 / 0.08);
+}
+
+.rs-state-card--success p {
+    color: #166534;
+}
+
+.rs-field-error {
+    margin: 0;
+    padding: 12px 14px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+}
+
+.rs-info-message {
+    margin: 0;
+    padding: 12px 14px;
+    border: 1px solid rgb(var(--rs-primary-rgb) / 0.18);
+    border-radius: 8px;
+    color: rgb(var(--rs-dark-rgb) / 0.72);
+}
+
+.rs-hint {
+    margin: -4px 0 0;
+    color: rgb(var(--rs-dark-rgb) / 0.66);
+    font-size: 0.86rem;
+}
+
+@media (max-width: 991.98px) {
+    .rs-review-layout,
+    .rs-info-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .rs-card--sticky {
+        position: static;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .rs-card,
+    .rs-state-card {
+        padding: 16px;
+    }
+
+    .rs-ingredient-list li {
+        grid-template-columns: 1fr;
+    }
+
+    .rs-ingredient-list em {
+        grid-column: auto;
+    }
+
+    .rs-actions .rs-btn,
+    .rs-rejection-form .rs-btn {
+        width: 100%;
+    }
+}

@@ -1,0 +1,42 @@
+.rs-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 11px 18px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.15s ease, background 0.2s ease;
+  text-decoration: none;
+}
+
+.rs-btn-primary {
+  background: var(--rs-accent);
+  color: rgb(var(--rs-dark-rgb) / 0.92);
+}
+
+.rs-btn-primary:hover {
+  transform: translateY(-1px);
+  background: var(--rs-accent-dark);
+}
+
+.rs-btn-primary:active {
+  transform: translateY(0);
+}
+
+.rs-btn:disabled,
+.rs-btn[disabled] {
+  border-color: rgb(var(--rs-dark-rgb) / 0.12);
+  background: rgb(var(--rs-dark-rgb) / 0.10);
+  color: rgb(var(--rs-dark-rgb) / 0.46);
+  cursor: not-allowed;
+  transform: none;
+}
+
+.rs-btn:disabled:hover,
+.rs-btn[disabled]:hover {
+  background: rgb(var(--rs-dark-rgb) / 0.10);
+  color: rgb(var(--rs-dark-rgb) / 0.46);
+  transform: none;
+}

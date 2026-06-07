@@ -1,0 +1,58 @@
+.rs-article {
+  margin-inline: auto;
+}
+
+.rs-article h1 {
+  font-size: clamp(1.9rem, 2.6vw, 2.4rem);
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.5rem;
+  color: var(--rs-dark);
+}
+
+.rs-article .text-muted {
+  color: rgba(var(--rs-dark-rgb), 0.6) !important;
+  margin-bottom: 1.5rem;
+  display: block;
+}
+
+.rs-article section {
+  margin-top: 1.75rem;
+}
+
+.rs-article h2 {
+  font-size: 1.25rem;
+  line-height: 1.25;
+  margin-bottom: 0.6rem;
+  color: var(--rs-dark);
+}
+
+.rs-article p {
+  margin-bottom: 0.9rem;
+  line-height: 1.7;
+  color: rgba(var(--rs-dark-rgb), 0.85);
+}
+
+.rs-article ul,
+.rs-article ol {
+  margin: 0.5rem 0 1rem 1.25rem;
+  padding: 0;
+  color: rgba(var(--rs-dark-rgb), 0.85);
+}
+
+.rs-article li {
+  margin: 0.4rem 0;
+  line-height: 1.65;
+}
+
+.rs-article section+section {
+  padding-top: 0.75rem;
+  border-top: 1px solid rgba(var(--rs-dark-rgb), 0.06);
+}
+
+.rs-article a {
+  color: var(--rs-primary-dark);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: color 0.2s ease;
+}

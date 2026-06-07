@@ -1,0 +1,49 @@
+<rs-auth-shell panelTitle="Nouveau ici ?" [overlayStrength]="0.28" panelText="Créez un compte pour enregistrer vos recettes favorites et partager les vôtres." panelCtaLabel="Inscription" panelCtaLink="/sign-up" panelImageUrl="/assets/images/auth/sign-in-hero.webp" panelAriaLabel="Aller vers la page d'inscription">
+    <div auth-left>
+        <h1 class="rs-auth-card-title">Connexion</h1>
+
+        <form class="rs-form" [formGroup]="form" (ngSubmit)="onSubmit()">
+            <div class="rs-field">
+                <label for="email" class="rs-label">Email <span aria-hidden="true">*</span></label>
+                <input id="email" type="email" class="rs-input" placeholder="nom@company.com" autocomplete="email" formControlName="email" required />
+
+                @if (email.touched && email.hasError('required')) {
+                <p class="rs-field-error">L'email est obligatoire.</p>
+                }
+
+                @if (email.touched && email.hasError('email')) {
+                <p class="rs-field-error">Le format de l'email est invalide.</p>
+                }
+            </div>
+
+            <div class="rs-field">
+                <label for="password" class="rs-label">Mot de passe <span aria-hidden="true">*</span></label>
+                <input id="password" type="password" class="rs-input" placeholder="Votre mot de passe" autocomplete="current-password" formControlName="password" required />
+
+                @if (password.touched && password.hasError('required')) {
+                <p class="rs-field-error">Le mot de passe est obligatoire.</p>
+                }
+            </div>
+
+            @if (apiSuccess()) {
+            <p class="rs-field-success" role="status" aria-live="polite">{{ apiSuccess() }}</p>
+            }
+
+            @if (apiError()) {
+            <p class="rs-field-error">{{ apiError() }}</p>
+            }
+
+            @if (showResendValidationLink()) {
+            <a routerLink="/auth/resend-validation-email" class="rs-auth-muted-link">Renvoyer l'email de validation</a>
+            }
+
+            <div class="rs-actions">
+                <button type="submit" class="rs-btn rs-btn-primary" [disabled]="isSubmitting()">
+                    {{ isSubmitting() ? 'Connexion...' : 'Se connecter' }}
+                </button>
+
+                <a routerLink="/forgot-password" class="rs-auth-muted-link">Mot de passe oublié ?</a>
+            </div>
+        </form>
+    </div>
+</rs-auth-shell>

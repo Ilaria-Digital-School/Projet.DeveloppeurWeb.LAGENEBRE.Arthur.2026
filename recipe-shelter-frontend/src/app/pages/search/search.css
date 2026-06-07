@@ -1,0 +1,107 @@
+.rs-search-page {
+    display: grid;
+    gap: 24px;
+}
+
+.rs-search-header {
+    display: grid;
+    gap: 8px;
+}
+
+.rs-search-header h1,
+.rs-search-header p,
+.rs-field-hint {
+    margin: 0;
+}
+
+.rs-search-header h1 {
+    color: rgb(var(--rs-dark-rgb) / 0.92);
+    font-size: clamp(1.8rem, 3.2vw, 2.4rem);
+    line-height: 1.15;
+}
+
+.rs-search-header p {
+    max-width: 620px;
+    color: rgb(var(--rs-dark-rgb) / 0.64);
+    font-size: 1.05rem;
+    line-height: 1.6;
+}
+
+.rs-search-form {
+    display: grid;
+    grid-template-columns: minmax(220px, 1fr) repeat(3, minmax(170px, 240px)) minmax(150px, 200px);
+    gap: 16px;
+    align-items: end;
+    padding: 20px;
+    border: 1px solid rgb(var(--rs-dark-rgb) / 0.10);
+    border-radius: 8px;
+    background: white;
+    box-shadow: 0 10px 24px rgb(0 0 0 / 0.04);
+}
+
+.rs-field {
+    display: grid;
+    gap: 8px;
+}
+
+.rs-label {
+    color: rgb(var(--rs-dark-rgb) / 0.78);
+    font-weight: 700;
+}
+
+.rs-input {
+    min-height: 44px;
+    width: 100%;
+    border: 1px solid rgb(var(--rs-dark-rgb) / 0.16);
+    border-radius: 8px;
+    padding: 10px 12px;
+    color: rgb(var(--rs-dark-rgb) / 0.88);
+    background: white;
+}
+
+.rs-input:focus {
+    border-color: rgb(var(--rs-primary-rgb) / 0.8);
+    outline: 3px solid var(--rs-focus-ring);
+    outline-offset: 2px;
+}
+
+.rs-input:disabled {
+    cursor: wait;
+    background: rgb(var(--rs-dark-rgb) / 0.04);
+}
+
+.rs-field-hint {
+    color: rgb(var(--rs-dark-rgb) / 0.62);
+    font-size: 0.9rem;
+}
+
+.rs-field-hint--error {
+    color: #b42318;
+}
+
+.rs-search-actions {
+    display: flex;
+    grid-column: 1 / -1;
+    gap: 10px;
+    justify-content: flex-end;
+}
+
+@media (max-width: 900px) {
+    .rs-search-form {
+        grid-template-columns: 1fr;
+    }
+
+    .rs-search-actions {
+        justify-content: stretch;
+    }
+
+    .rs-search-actions .rs-btn {
+        flex: 1;
+    }
+}
+
+@media (max-width: 520px) {
+    .rs-search-actions {
+        display: grid;
+    }
+}

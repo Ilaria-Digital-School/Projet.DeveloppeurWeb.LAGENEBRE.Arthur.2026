@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Recipe Shelter — Des milliers de recettes à portée de main. Partagez, commentez et sauvegardez vos recettes préférées." />
+  <title>Accueil — Recipe Shelter</title>
+  <link rel="stylesheet" href="css/main.css" />
+</head>
+
+<body>
+
+  <!-- ══════════════ EN-TÊTE ══════════════ -->
+  <header class="rs-header" aria-label="En-tête">
+    <div class="rs-shell">
+      <div class="rs-header-inner">
+
+        <a href="index.html" class="rs-brand" aria-label="Accueil Recipe Shelter">Recipe Shelter</a>
+
+        <form id="header-search-form" class="rs-header-search" role="search">
+          <label class="visually-hidden" for="header-search-q">Rechercher une recette</label>
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+            <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398l3.85 3.85a1 1 0 0 0 1.415-1.415zm-5.242 1.15a5.5 5.5 0 1 1 0-11 5.5 5.5 0 0 1 0 11" />
+          </svg>
+          <input id="header-search-q" name="q" type="search" placeholder="Rechercher une recette…" autocomplete="off"
+            aria-label="Rechercher une recette" />
+          <button type="submit" aria-label="Lancer la recherche">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+              <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8" />
+            </svg>
+          </button>
+        </form>
+
+        <button id="hamburger" class="rs-hamburger" type="button" aria-controls="main-nav" aria-expanded="false" aria-label="Afficher le menu principal">
+          <span></span><span></span><span></span>
+        </button>
+
+        <nav id="main-nav" class="rs-nav" aria-label="Navigation principale">
+          <a href="index.html" aria-current="page">Accueil</a>
+          <a href="recipes.html">Recettes</a>
+          <a href="sign-in.html">Connexion</a>
+          <a href="sign-up.html">Inscription</a>
+        </nav>
+
+      </div>
+    </div>
+  </header>
+
+  <!-- ══════════════ CONTENU ══════════════ -->
+  <main id="main-content" class="rs-main">
+    <div class="rs-shell">
+
+      <!-- Hero -->
+      <section aria-label="Présentation du site">
+        <div class="hero-panel">
+          <div class="hero-overlay">
+            <h1 class="hero-title">Des milliers de recettes à portée de main</h1>
+            <p class="hero-subtitle">Du plat rapide du quotidien aux recettes du monde entier, trouvez l'inspiration et transformez chaque repas en moment de plaisir.</p>
+            <a href="sign-up.html" class="rs-btn rs-btn-primary hero-cta">Rejoindre la communauté</a>
+          </div>
+          <!-- Image décorative -->
+          <img class="hero-image" src="assets/images/placeholder.svg" alt="" width="1280" height="520" loading="eager" fetchpriority="high" decoding="async" />
+        </div>
+      </section>
+
+      <!-- Catégories -->
+      <section class="rs-home-section" aria-labelledby="categories-title">
+        <div class="rs-section-header">
+          <h2 id="categories-title">Explorer par catégorie</h2>
+          <a href="recipes.html" class="rs-btn rs-btn-outline">Voir tout</a>
+        </div>
+        <div class="rs-categories-grid">
+          <a href="recipes.html?category=Desserts" class="rs-category-card"><span class="icon" aria-hidden="true">🍰</span>Desserts</a>
+          <a href="recipes.html?category=Viandes" class="rs-category-card"><span class="icon" aria-hidden="true">🥩</span>Viandes</a>
+          <a href="recipes.html?category=Poissons" class="rs-category-card"><span class="icon" aria-hidden="true">🐟</span>Poissons</a>
+          <a href="recipes.html?category=Soupes" class="rs-category-card"><span class="icon" aria-hidden="true">🍲</span>Soupes</a>
+          <a href="recipes.html?category=Salades" class="rs-category-card"><span class="icon" aria-hidden="true">🥗</span>Salades</a>
+          <a href="recipes.html?category=Vegetarien" class="rs-category-card"><span class="icon" aria-hidden="true">🥦</span>Végétarien</a>
+          <a href="recipes.html?category=Pates" class="rs-category-card"><span class="icon" aria-hidden="true">🍝</span>Pâtes & Riz</a>
+          <a href="recipes.html?category=Petitdejeuner" class="rs-category-card"><span class="icon" aria-hidden="true">🥐</span>Petit-déjeuner</a>
+        </div>
+      </section>
+
+      <!-- Recettes récentes -->
+      <section class="rs-home-section" aria-labelledby="recent-title">
+        <div class="rs-section-header">
+          <h2 id="recent-title">Dernières recettes publiées</h2>
+          <a href="recipes.html" class="rs-btn rs-btn-outline">Voir tout</a>
+        </div>
+        <div class="rs-recipes-grid">
+
+          <article class="rs-recipe-card">
+            <a class="rs-recipe-card-link" href="recipe-detail.html?slug=tarte-aux-pommes">
+              <div class="rs-recipe-image">
+                <img src="assets/images/placeholder.svg" alt="" width="400" height="300" loading="lazy" />
+              </div>
+              <div class="rs-recipe-card-body">
+                <div>
+                  <span class="rs-category">Desserts</span>
+                  <h2>Tarte aux Pommes Normande</h2>
+                </div>
+                <p>Une tarte aux pommes généreuse avec une crème normande onctueuse et une pâte brisée maison croustillante.</p>
+                <div class="rs-recipe-meta" aria-label="Informations de la recette">
+                  <span class="rs-meta-item">75 min</span>
+                  <span class="rs-meta-item">8 portions</span>
+                  <span class="rs-meta-item">★ 4.8</span>
+                  <span class="rs-meta-item">Par Sophie M.</span>
+                </div>
+              </div>
+            </a>
+            <button type="button" class="rs-fav-badge" data-fav-btn="tarte-aux-pommes">♡</button>
+          </article>
+
+          <article class="rs-recipe-card">
+            <a class="rs-recipe-card-link" href="recipe-detail.html?slug=boeuf-bourguignon">
+              <div class="rs-recipe-image">
+                <img src="assets/images/placeholder.svg" alt="" width="400" height="300" loading="lazy" />
+              </div>
+              <div class="rs-recipe-card-body">
+                <div>
+                  <span class="rs-category">Viandes</span>
+                  <h2>Bœuf Bourguignon</h2>
+                </div>
+                <p>Le classique français mijoté pendant des heures dans un vin de Bourgogne avec des légumes de saison.</p>
+                <div class="rs-recipe-meta" aria-label="Informations de la recette">
+                  <span class="rs-meta-item">3h45</span>
+                  <span class="rs-meta-item">6 portions</span>
+                  <span class="rs-meta-item">★ 4.9</span>
+                  <span class="rs-meta-item">Par Jean P.</span>
+                </div>
+              </div>
+            </a>
+            <button type="button" class="rs-fav-badge" data-fav-btn="boeuf-bourguignon">♡</button>
+          </article>
+
+          <article class="rs-recipe-card">
+            <a class="rs-recipe-card-link" href="recipe-detail.html?slug=risotto-parmesan">
+              <div class="rs-recipe-image">
+                <img src="assets/images/placeholder.svg" alt="" width="400" height="300" loading="lazy" />
+              </div>
+              <div class="rs-recipe-card-body">
+                <div>
+                  <span class="rs-category">Pâtes & Riz</span>
+                  <h2>Risotto au Parmesan</h2>
+                </div>
+                <p>Un risotto crémeux et savoureux, préparé avec un bon bouillon de légumes et du parmesan affiné.</p>
+                <div class="rs-recipe-meta" aria-label="Informations de la recette">
+                  <span class="rs-meta-item">45 min</span>
+                  <span class="rs-meta-item">4 portions</span>
+                  <span class="rs-meta-item">★ 4.6</span>
+                  <span class="rs-meta-item">Par Marco L.</span>
+                </div>
+              </div>
+            </a>
+            <button type="button" class="rs-fav-badge" data-fav-btn="risotto-parmesan">♡</button>
+          </article>
+
+          <article class="rs-recipe-card">
+            <a class="rs-recipe-card-link" href="recipe-detail.html?slug=gateau-chocolat">
+              <div class="rs-recipe-image">
+                <img src="assets/images/placeholder.svg" alt="" width="400" height="300" loading="lazy" />
+              </div>
+              <div class="rs-recipe-card-body">
+                <div>
+                  <span class="rs-category">Desserts</span>
+                  <h2>Gâteau au Chocolat Fondant</h2>
+                </div>
+                <p>Un gâteau au chocolat ultra fondant avec un cœur coulant, à servir tiède avec une boule de glace vanille.</p>
+                <div class="rs-recipe-meta" aria-label="Informations de la recette">
+                  <span class="rs-meta-item">45 min</span>
+                  <span class="rs-meta-item">6 portions</span>
+                  <span class="rs-meta-item">★ 4.7</span>
+                  <span class="rs-meta-item">Par Claire D.</span>
+                </div>
+              </div>
+            </a>
+            <button type="button" class="rs-fav-badge" data-fav-btn="gateau-chocolat">♡</button>
+          </article>
+
+        </div>
+      </section>
+
+    </div><!-- /rs-shell -->
+  </main>
+
+  <!-- ══════════════ PIED DE PAGE ══════════════ -->
+  <footer class="rs-footer">
+    <div class="rs-shell">
+      <div class="rs-footer-inner">
+        <span>© 2025 Recipe Shelter</span>
+        <nav class="rs-footer-links" aria-label="Liens du pied de page">
+          <a href="#">Mentions légales</a>
+          <a href="#">Politique de confidentialité</a>
+          <a href="#">CGU</a>
+          <a href="#">Contact</a>
+        </nav>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+
+</html>
